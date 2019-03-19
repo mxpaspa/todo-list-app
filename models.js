@@ -39,20 +39,28 @@ const listSchema = mongoose.Schema({
   tasks: [taskSchema]
 });
 
-listSchema.pre('save', function(next) {
-  let counter = 0;
-  this.tasks.forEach(task => {
-    if (task.completed.status == 'pending') {
-      counter += 1;
-    }
+// subTaskSchema.pre('save', function(next) {
+//   let taskCounter = listSchema.incomplete_count.tasks;
+//   let subTaskCounter = this.incomplete_count.subTasks;
 
-    if (task.completed.status == 'completed') {
-      counter -= 1;
-    }
-  });
-  this.incomplete_count.tasks = counter;
-  next();
-});
+//   if (this.isNew('tasks')) {
+//     // this.tasks.forEach(task => {
+//     //   // count the tasks
+//     //   if (task.completed.status == 'pending') {
+//     //     taskCounter += 1;
+//     //   }
+
+//     //   if (task.completed.status == 'completed') {
+//     //     taskCounter -= 1;
+//     //   }
+//     // });
+//     console.log(tasks);
+//   }
+
+//   //   this.incomplete_count.tasks = taskCounter;
+//   //   this.incomplete_count.subTasks = subTaskCounter;
+//   next();
+// });
 
 listSchema.plugin(patchHistory.default, { mongoose, name: 'listPatches' });
 let List = mongoose.model('List', listSchema);

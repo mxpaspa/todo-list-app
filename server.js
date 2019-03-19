@@ -35,7 +35,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
  */
 app.post('/tasks', (req, res) => {
   //Move the validation stuff to a different module
-  req.check('listTitle', 'Please select which list you want to add your task to').notEmpty();
+  req.check('listID', 'Please select which list you want to add your task to').notEmpty();
   req.checkBody('taskTitle', 'Please provide a name for your task').notEmpty();
   //TODO: this works, but still getting an unhandled promise error in the console
   //TODO: do I need this ?
@@ -47,7 +47,7 @@ app.post('/tasks', (req, res) => {
       });
     }
   });
-  const listTitle = req.body.listTitle;
+  const listID = req.body.listID;
   const taskTitle = req.body.taskTitle;
   const taskDescription = req.body.taskDescription;
 
@@ -59,9 +59,10 @@ app.post('/tasks', (req, res) => {
     }
   };
   //TODO: use this, or findOneAndUpdate here ?
-  List.findOne({ title: listTitle })
+  List.findById(listID)
     .then(list => {
       list.tasks.push(newTask);
+      list.incomplete_count.tasks += 1;
       list
         .save()
         .then(doc => res.send(doc + ' task was added'))
@@ -71,17 +72,17 @@ app.post('/tasks', (req, res) => {
 });
 
 app.get('/tasks', (req, res) => {
-  listTitle = req.query.listTitle;
-  taskID = req.query.listTitle;
-  List.findOne({ title: listTitle })
+  listID = req.query.listID;
+  taskID = req.query.listID;
+  List.findById(listID)
     .then(list => res.send(list.tasks))
     .catch(err => res.status(400).send(err + 'unable to lists tasks'));
 });
 
 app.get('/tasks/:id', (req, res) => {
   let taskID = req.params.id;
-  let listTitle = req.query.listTitle;
-  List.findOne({ title: listTitle })
+  let listID = req.query.listID;
+  List.findById(listID)
     .then(list => {
       let doc = list.tasks.id(taskID);
       res.send(doc);
@@ -103,21 +104,26 @@ app.put('/tasks/:id/toggle_completion', (req, res) => {
   let listID = req.body.listID;
   let taskID = req.params.id;
 
+  //TODO: use find by id here
   List.findOne({ _id: listID }, (err, list) => {
     let task = list.tasks.id(taskID);
 
     if (task.completed.status == 'pending') {
       task.completed = { status: 'completed', completed_at: new Date() };
+      list.incomplete_count.tasks -= 1;
       task.subTasks.forEach(subTask => {
         if (subTask.completed.status == 'pending') {
           subTask.completed = { status: 'completed', completed_at: new Date(), toggled_all: true };
+          list.incomplete_count.subTasks -= 1;
         }
       });
     } else if (task.completed.status == 'completed') {
       task.completed = { status: 'pending' };
+      list.incomplete_count.tasks += 1;
       task.subTasks.forEach(subTask => {
         if (subTask.completed.toggled_all == true && subTask.completed.status == 'completed') {
           subTask.completed = { status: 'pending', toggled_all: false };
+          list.incomplete_count.subTasks += 1;
         }
       });
     }
@@ -178,6 +184,7 @@ app.put('/lists/:id/toggle_completion', (req, res) => {
       list.tasks.forEach(task => {
         if (task.completed.status == 'pending') {
           task.completed = { status: 'completed', completed_at: new Date(), toggled_all: true };
+          list.incomplete_count.tasks -= 1;
           task.subTasks.forEach(subTask => {
             if (subTask.completed.status == 'pending') {
               subTask.completed = {
@@ -185,6 +192,7 @@ app.put('/lists/:id/toggle_completion', (req, res) => {
                 completed_at: new Date(),
                 toggled_all: true
               };
+              list.incomplete_count.subTasks -= 1;
             }
           });
         }
@@ -194,9 +202,11 @@ app.put('/lists/:id/toggle_completion', (req, res) => {
       list.tasks.forEach(task => {
         if (task.completed.toggled_all == true && task.completed.status == 'completed') {
           task.completed = { status: 'pending', toggled_all: false };
+          list.incomplete_count.tasks += 1;
           task.subTasks.forEach(subTask => {
             if (subTask.completed.toggled_all == true && subTask.completed.status == 'completed') {
               subTask.completed = { status: 'pending', toggled_all: false };
+              list.incomplete_count.subTasks += 1;
             }
           });
         }
@@ -222,7 +232,7 @@ app.delete('/lists/:id', (req, res) => {
  */
 app.post('/subtasks', (req, res) => {
   //Move the validation stuff to a different module
-  req.checkBody('listTitle', 'Please select which list you want to add your task to').notEmpty();
+  req.checkBody('listID', 'Please select which list you want to add your task to').notEmpty();
   req.checkBody('taskID', 'Please select which task you want to add your task to').notEmpty();
   req.checkBody('subTaskTitle', 'Please provide a name for your subtask').notEmpty();
   //TODO: this works, but still getting an unhandled promise error in the console
@@ -235,7 +245,8 @@ app.post('/subtasks', (req, res) => {
       });
     }
   });
-  const listTitle = req.body.listTitle;
+  //TODO: use listID here instead
+  const listID = req.body.listID;
   const taskID = req.body.taskID;
   const subTaskTitle = req.body.subTaskTitle;
   const subTaskDescription = req.body.subTaskDescription;
@@ -248,10 +259,11 @@ app.post('/subtasks', (req, res) => {
     }
   };
   //TODO: use this, or findOneAndUpdate here ?
-  List.findOne({ title: listTitle })
+  List.findById(listID)
     .then(list => {
       let task = list.tasks.id(taskID);
       task.subTasks.push(newSubTask);
+      list.incomplete_count.subTasks += 1;
       list
         .save()
         .then(doc => res.send(doc + ' task was added'))
@@ -273,11 +285,11 @@ app.get('/subtasks', (req, res) => {
 });
 
 app.get('/subtasks/:id', (req, res) => {
-  let listTitle = req.query.listTitle;
+  let listID = req.query.listID;
   let taskID = req.query.taskID;
   let subtaskID = req.params.id;
 
-  List.findOne({ title: listTitle })
+  List.findById(listID)
     .then(list => {
       let doc = list.tasks.id(taskID).subTasks.id(subtaskID);
       res.send(doc);
@@ -293,9 +305,14 @@ app.put('/subtasks/:id/toggle_completion', (req, res) => {
   List.findById(listID)
     .then(list => {
       let subTask = list.tasks.id(taskID).subTasks.id(subtaskID);
-      subTask.completed.status == 'pending'
-        ? (subTask.completed = { status: 'completed', completed_at: new Date() })
-        : (subTask.completed = { status: 'pending' });
+      if (subTask.completed.status == 'pending') {
+        subTask.completed = { status: 'completed', completed_at: new Date() };
+        list.incomplete_count.subTasks -= 1;
+      } else {
+        subTask.completed = { status: 'pending' };
+        list.incomplete_count.subTasks += 1;
+      }
+
       list.save().then(subTask => res.send(subTask));
     })
     .catch(err => res.status(400).send(err));
