@@ -149,7 +149,8 @@ app.post('/lists', (req, res) => {
   const newList = new List({
     title: listTitle,
     completed: { status: 'pending' },
-    incomplete_count: { tasks: 0, subTasks: 0 }
+    incomplete_count: { tasks: 0, subTasks: 0 },
+    previousState: ''
   });
   newList
     .save()
@@ -179,7 +180,20 @@ app.put('/lists/:id/toggle_completion', (req, res) => {
   //TODO: need a catch here for findById ?
   let id = req.params.id;
   List.findById(id).then(list => {
-    if (list.completed.status == 'pending') {
+    console.log('prevstate', list.previousState);
+    if (list.completed.status == 'completed') {
+      console.log('Setting to pending');
+      const restoredState = JSON.parse(list.previousState);
+      list.completed = restoredState.completed;
+      list.tasks = restoredState.tasks;
+      list.incomplete_count = restoredState.incomplete_count;
+
+      // list = restoredState;
+    } else if (list.completed.status == 'pending') {
+      list.previousState = '';
+      const previousState = JSON.stringify(list);
+      list.previousState = previousState;
+      console.log('Setting to complete');
       list.completed = { status: 'completed', completed_at: new Date() };
       list.tasks.forEach(task => {
         if (task.completed.status == 'pending') {
@@ -197,25 +211,33 @@ app.put('/lists/:id/toggle_completion', (req, res) => {
           });
         }
       });
-    } else if (list.completed.status == 'completed') {
-      list.completed = { status: 'pending' };
-      list.tasks.forEach(task => {
-        if (task.completed.toggled_all == true && task.completed.status == 'completed') {
-          task.completed = { status: 'pending', toggled_all: false };
-          list.incomplete_count.tasks += 1;
-          task.subTasks.forEach(subTask => {
-            if (subTask.completed.toggled_all == true && subTask.completed.status == 'completed') {
-              subTask.completed = { status: 'pending', toggled_all: false };
-              list.incomplete_count.subTasks += 1;
-            }
-          });
-        }
-      });
+    } else {
+      console.error('Something went wrong');
     }
+
+    // else if (list.completed.status == 'completed' && restore != 'true') {
+    //   console.log('Setting to pending');
+    //   list.completed = { status: 'pending' };
+    //   list.tasks.forEach(task => {
+    //     if (task.completed.toggled_all == true && task.completed.status == 'completed') {
+    //       task.completed = { status: 'pending', toggled_all: false };
+    //       list.incomplete_count.tasks += 1;
+    //       task.subTasks.forEach(subTask => {
+    //         if (subTask.completed.toggled_all == true && subTask.completed.status == 'completed') {
+    //           subTask.completed = { status: 'pending', toggled_all: false };
+    //           list.incomplete_count.subTasks += 1;
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
 
     list
       .save()
-      .then(list => res.send(list))
+      .then(list => {
+        console.log('List saved successfully');
+        res.send(list);
+      })
       .catch(err => res.status(204).send(err));
   });
 });

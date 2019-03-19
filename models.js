@@ -36,7 +36,8 @@ const listSchema = mongoose.Schema({
     completed_at: { type: Date, required: false }
   },
   incomplete_count: { tasks: { type: Number }, subTasks: { type: Number } },
-  tasks: [taskSchema]
+  tasks: [taskSchema],
+  previousState: String
 });
 
 // subTaskSchema.pre('save', function(next) {
