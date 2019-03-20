@@ -14,14 +14,17 @@ A todo list backend built in Node.js, MongoDB, and Mongoose
 
 #### Photo Resources
 
-- **[<code>GET</code> lists]**
-- **[<code>GET</code> lists/:id]**
-- **[<code>POST</code> lists/]**
-- **DATA Params**
+- **<code>GET</code> /lists**
+- **<code>GET</code> /lists/:id**
+- **<code>POST</code> /lists**
+  - required data params: listTitle
+- **<code>PUT</code> /lists/:id/toggle_completion**
+  - require url params: id
+  - required data params: listTitle
+- **<code>DELETE</code> /lists/:id**
+  - require url params: id
 
-  **Required:**
-
-  `listTitle=[string]`
+`listTitle=[string]`
 
   <!-- **Show User**
 
@@ -141,6 +144,10 @@ help
 ## Third Party Technologies Used:
 
 - [mlab.com](https://mlab.com/welcome/) provided a cloud instance of MongoDB.
+
+```
+
+```
 
 ```
 
