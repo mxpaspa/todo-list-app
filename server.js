@@ -24,7 +24,7 @@ app.use('/', tasks);
 app.use('/', lists);
 app.use('/', subtasks);
 
-let uri = 'mongodb://paspam:smashingBoxes9@ds117866.mlab.com:17866/sb-todo-app';
+let uri = 'mongodb://paspam:@ds117866.mlab.com:17866/sb-todo-app';
 var options = {
   keepAlive: 300000,
   connectTimeoutMS: 30000,
