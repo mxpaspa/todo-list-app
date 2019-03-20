@@ -10,8 +10,6 @@ A todo list backend built in Node.js, MongoDB, and Mongoose
 
 #### 4. The application is now ready to receive requests.
 
-#### 5. You can make requests from postman or with curl.
-
 #### LISTS Endpoints
 
 - **<code>GET</code> /lists**
