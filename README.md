@@ -57,11 +57,3 @@ A todo list backend built in Node.js, MongoDB, and Mongoose
 ## Third Party Technologies Used:
 
 - [mlab.com](https://mlab.com/welcome/) provided a cloud instance of MongoDB.
-
-```
-
-```
-
-```
-
-```
