@@ -10,8 +10,7 @@ const subTaskSchema = mongoose.Schema({
       type: String,
       default: 'pending'
     },
-    completed_at: { type: Date, required: false },
-    toggled_all: { type: Boolean, default: false }
+    completed_at: { type: Date, required: false }
   }
 });
 
@@ -23,8 +22,7 @@ const taskSchema = mongoose.Schema({
       type: String,
       default: 'pending'
     },
-    completed_at: { type: Date, required: false },
-    toggled_all: { type: Boolean, default: false }
+    completed_at: { type: Date, required: false }
   },
   subTasks: [subTaskSchema]
 });

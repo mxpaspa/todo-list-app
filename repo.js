@@ -62,3 +62,20 @@
  * express patches !!
  */
 // list.patches.find({ ref: list.id }).then(patches => (list = list.rollback(patches[0].id)));
+
+// else if (list.completed.status == 'completed' && restore != 'true') {
+//   console.log('Setting to pending');
+//   list.completed = { status: 'pending' };
+//   list.tasks.forEach(task => {
+//     if (task.completed.toggled_all == true && task.completed.status == 'completed') {
+//       task.completed = { status: 'pending', toggled_all: false };
+//       list.incomplete_count.tasks += 1;
+//       task.subTasks.forEach(subTask => {
+//         if (subTask.completed.toggled_all == true && subTask.completed.status == 'completed') {
+//           subTask.completed = { status: 'pending', toggled_all: false };
+//           list.incomplete_count.subTasks += 1;
+//         }
+//       });
+//     }
+//   });
+// }
