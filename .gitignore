@@ -1,1 +1,4 @@
-!.env
+.env
+.DS_Store
+**/.DS_Store
+node_modules
