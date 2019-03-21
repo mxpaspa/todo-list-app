@@ -15,6 +15,7 @@ const util = require('util');
 const tasks = require('./routes/task-router');
 const lists = require('./routes/list-router');
 const subtasks = require('./routes/subtask-router');
+const config = require('config');
 
 app.set('PORT', PORT);
 app.use(expressValidator());
@@ -32,7 +33,7 @@ var options = {
 };
 
 //TODO: put the DB related code in a seperate file
-mongoose.connect(uri, options);
+mongoose.connect(config.uri, options);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 

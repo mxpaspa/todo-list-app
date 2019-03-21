@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-// import patchHistory from 'mongoose-patch-history';
-const patchHistory = require('mongoose-patch-history');
 
 const subTaskSchema = mongoose.Schema({
   title: { type: String },
@@ -38,29 +36,5 @@ const listSchema = mongoose.Schema({
   previousState: String
 });
 
-// subTaskSchema.pre('save', function(next) {
-//   let taskCounter = listSchema.incomplete_count.tasks;
-//   let subTaskCounter = this.incomplete_count.subTasks;
-
-//   if (this.isNew('tasks')) {
-//     // this.tasks.forEach(task => {
-//     //   // count the tasks
-//     //   if (task.completed.status == 'pending') {
-//     //     taskCounter += 1;
-//     //   }
-
-//     //   if (task.completed.status == 'completed') {
-//     //     taskCounter -= 1;
-//     //   }
-//     // });
-//     console.log(tasks);
-//   }
-
-//   //   this.incomplete_count.tasks = taskCounter;
-//   //   this.incomplete_count.subTasks = subTaskCounter;
-//   next();
-// });
-
-listSchema.plugin(patchHistory.default, { mongoose, name: 'listPatches' });
 let List = mongoose.model('List', listSchema);
 module.exports = List;

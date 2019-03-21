@@ -1,4 +1,5 @@
 process.env.NODE_ENV = 'test';
+
 let mongoose = require('mongoose');
 let List = require('../models');
 let server = require('../server');
@@ -8,16 +9,16 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 setTimeout(() => {
-  let uri = 'mongodb://paspam:smashingBoxes9@ds117866.mlab.com:17866/sb-todo-app';
-  var options = {
-    keepAlive: 300000,
-    connectTimeoutMS: 30000,
-    useNewUrlParser: true
-  };
+  // let uri = 'mongodb://paspam:smashingBoxes9@ds117866.mlab.com:17866/sb-todo-app';
+  // var options = {
+  //   keepAlive: 300000,
+  //   connectTimeoutMS: 30000,
+  //   useNewUrlParser: true
+  // };
 
-  mongoose.connect(uri, options);
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
+  // mongoose.connect(uri, options);
+  // var db = mongoose.connection;
+  // db.on('error', console.error.bind(console, 'connection error:'));
 
   describe('Task Routes ', () => {
     beforeEach(done => {
@@ -31,7 +32,7 @@ setTimeout(() => {
         // tasksController.getTasks();
 
         const testList = new List({
-          title: 'mocha test ',
+          title: 'mocha test !!! ',
           completed: { status: 'pending' },
           incomplete_count: { tasks: 0, subTasks: 0 },
           previousState: ''
