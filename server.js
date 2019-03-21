@@ -16,7 +16,6 @@ const util = require('util');
 const tasks = require('./routes/task-router');
 const lists = require('./routes/list-router');
 const subtasks = require('./routes/subtask-router');
-const config = require('config');
 
 app.use(expressValidator());
 app.use(bodyParser.json());

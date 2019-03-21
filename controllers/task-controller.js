@@ -1,6 +1,4 @@
 const List = require('../models');
-const chaiHttp = require('chai-http');
-const expressValidator = require('express-validator');
 
 module.exports = {
   createTask: function(req, res) {
@@ -35,9 +33,9 @@ module.exports = {
         list
           .save()
           .then(task => res.send(task + ' Task was successfully added'))
-          .catch(err => res.status(400).send(err + '  Failed to save task'));
+          .catch(err => res.status(500).send(err + '  Failed to save task'));
       })
-      .catch(err => res.status(400).send(err));
+      .catch(err => res.status(404).send(err));
   },
 
   getTasks: function(req, res) {
@@ -56,6 +54,7 @@ module.exports = {
         let doc = list.tasks.id(taskID);
         res.send(doc);
       })
+      //TODO: correct error here ?
       .catch(err => res.status(422).send(err));
   },
 
