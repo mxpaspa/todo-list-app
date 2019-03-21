@@ -3,11 +3,9 @@
 //TODO: conver this to ansyc/await
 //TODO: determine which errors need to be console.logged and which need to be sent to the client
 
-const config = require('./config');
-
+const config = require('config');
 const express = require('express');
 const expressValidator = require('express-validator');
-
 const app = express();
 
 const List = require('./models');
