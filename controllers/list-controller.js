@@ -32,70 +32,68 @@ module.exports = {
   },
 
   showLists: function(req, res) {
-    List.find({})
+    List.find({}, { previousState: 0 })
       .lean()
-      .then(tasks => res.send(tasks))
+      .then(lists => res.send(lists))
       .catch(err => res.status(422).send(err + 'Unable to find list'));
   },
 
   findListById: function(req, res) {
     let id = req.params.id;
-    List.findById(id)
+    List.findById(id, { previousState: 0 })
       .then(list => res.send(list))
       .catch(err => res.status(422).send(err + ' could not find that list'));
   },
 
+  //TODO: add comments
   toggleList: function(req, res) {
     let id = req.params.id;
-    List.findById(id).then(list => {
-      if (list.completed.status == 'completed') {
-        const restoredState = JSON.parse(list.previousState);
-        list.title = restoredState.title;
-        list.completed = restoredState.completed;
-        list.tasks = restoredState.tasks;
-        list.incomplete_count = restoredState.incomplete_count;
+    List.findById(id)
+      .then(list => {
+        if (list.completed.status == 'completed') {
+          const restoredState = JSON.parse(list.previousState);
+          list.title = restoredState.title;
+          list.completed = restoredState.completed;
+          list.tasks = restoredState.tasks;
+          list.incomplete_count = restoredState.incomplete_count;
 
-        // list = restoredState;
-      } else if (list.completed.status == 'pending') {
-        list.previousState = '';
-        const previousState = JSON.stringify(list);
-        list.previousState = previousState;
-        list.completed = { status: 'completed', completed_at: new Date() };
-        list.incomplete_count.tasks = 0;
-        list.incomplete_count.subTasks = 0;
+          // list = restoredState;
+        } else if (list.completed.status == 'pending') {
+          list.previousState = '';
+          const previousState = JSON.stringify(list);
+          list.previousState = previousState;
+          list.completed = { status: 'completed', completed_at: new Date() };
+          list.incomplete_count.tasks = 0;
+          list.incomplete_count.subTasks = 0;
 
-        list.tasks.forEach(task => {
-          if (task.completed.status == 'pending') {
-            task.completed = { status: 'completed', completed_at: new Date() };
-            task.subTasks.forEach(subTask => {
-              if (subTask.completed.status == 'pending') {
-                subTask.completed = {
-                  status: 'completed',
-                  completed_at: new Date()
-                };
-              }
-            });
-          }
-        });
-      } else {
-        console.error('Something went wrong');
-      }
+          list.tasks.forEach(task => {
+            if (task.completed.status == 'pending') {
+              task.completed = { status: 'completed', completed_at: new Date() };
+              task.subTasks.forEach(subTask => {
+                if (subTask.completed.status == 'pending') {
+                  subTask.completed = {
+                    status: 'completed',
+                    completed_at: new Date()
+                  };
+                }
+              });
+            }
+          });
+        } else {
+          console.error('Something went wrong');
+        }
 
-      list
-        .save()
-        .then(list => {
-          res.send(list);
-        })
-        .catch(err => res.status(204).send(err));
-    });
+        return list.save();
+      })
+      .then(list => {
+        res.send(list);
+      })
+      .catch(err => res.status(204).send(err));
   },
 
+  //TODO: is there a mongoose query that will detel
   deleteList: function(req, res) {
     let id = req.params.id;
-    // List.findById(id)
-    //   .then(doc => doc.remove())
-    //   .catch(err => res.statu(400).send(err));
-    // List.find({ _id:id }).remove().exec()
     List.findByIdAndRemove(id, function(err, offer) {
       if (err) {
         throw err;

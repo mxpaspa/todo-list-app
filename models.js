@@ -36,5 +36,11 @@ const listSchema = mongoose.Schema({
   previousState: String
 });
 
+listSchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.previousState;
+  return obj;
+};
+
 let List = mongoose.model('List', listSchema);
 module.exports = List;
