@@ -23,7 +23,8 @@ module.exports = {
       description: taskDescription,
       completed: {
         status: 'pending'
-      }
+      },
+      previousTaskState: ''
     };
 
     List.findById(listID)
@@ -76,20 +77,28 @@ module.exports = {
 
     //TODO: reading back the entire list here, not sure if that's desireable
     //TODO: the instance method is not working as desired-the response still sends back previousState
+    //TODO:
+    //TODO: there is no error being thrown here, when the wrong task id is being passed into the url
     List.findById(listID)
       .then(list => {
         let task = list.tasks.id(taskID);
 
         if (task.completed.status == 'completed') {
-          const restoredState = JSON.parse(list.previousState);
-          list.title = restoredState.title;
-          list.completed = restoredState.completed;
-          list.tasks = restoredState.tasks;
-          list.incomplete_count = restoredState.incomplete_count;
+          const restoredTaskState = JSON.parse(task.previousTaskState);
+          const restoredListState = JSON.parse(list.previousState);
+
+          task.title = restoredTaskState.title;
+          task.completed = restoredTaskState.completed;
+          list.incomplete_count.tasks = restoredListState.incomplete_count.tasks;
+          list.incomplete_count.subTasks = restoredListState.incomplete_count.subTasks;
+          // list.incomplete_count.tasks = list.previousState.incomplete_count
         } else if (task.completed.status == 'pending') {
-          list.previousState = '';
-          const previousState = JSON.stringify(list);
-          list.previousState = previousState;
+          task.previousState = '';
+          const previousTaskState = JSON.stringify(task);
+          const previousListState = JSON.stringify(list);
+
+          list.previousState = previousListState;
+          task.previousTaskState = previousTaskState;
 
           task.completed = { status: 'completed', completed_at: new Date() };
           list.incomplete_count.tasks -= 1;
@@ -102,6 +111,7 @@ module.exports = {
           });
         }
 
+        // list.toJSON();
         return list.save();
       })
       .then(list => {

@@ -22,7 +22,8 @@ const taskSchema = mongoose.Schema({
     },
     completed_at: { type: Date, required: false }
   },
-  subTasks: [subTaskSchema]
+  subTasks: [subTaskSchema],
+  previousTaskState: String
 });
 
 const listSchema = mongoose.Schema({
@@ -39,6 +40,13 @@ const listSchema = mongoose.Schema({
 listSchema.methods.toJSON = function() {
   var obj = this.toObject();
   delete obj.previousState;
+  return obj;
+};
+
+//TODO: this is only converting to an object, not deleting the property
+taskSchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.previousTaskState;
   return obj;
 };
 
