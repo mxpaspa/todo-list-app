@@ -89,6 +89,7 @@ module.exports = {
 
           task.title = restoredTaskState.title;
           task.completed = restoredTaskState.completed;
+          task.subTasks = restoredTaskState.subTasks;
           list.incomplete_count.tasks = restoredListState.incomplete_count.tasks;
           list.incomplete_count.subTasks = restoredListState.incomplete_count.subTasks;
           // list.incomplete_count.tasks = list.previousState.incomplete_count
