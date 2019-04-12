@@ -37,7 +37,7 @@ module.exports = {
         list.incomplete_count.subTasks += 1;
         list
           .save()
-          .then(doc => res.send(doc + ' sub task was successfully saved'))
+          .then(doc => res.send(doc))
           .catch(err => res.status(400).send(err + "  Coudln't save subtask"));
       })
       .catch(err => res.status(400).send(err));

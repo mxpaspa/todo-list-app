@@ -3,7 +3,7 @@ const util = require('util');
 const expressValidator = require('express-validator');
 
 module.exports = {
-  createList: function(req, res) {
+  createList: function(req, res, next) {
     req.checkBody('listTitle', 'Please give your list a title').notEmpty();
     req.getValidationResult().then(result => {
       if (!result.isEmpty()) {
@@ -24,17 +24,20 @@ module.exports = {
     newList
       .save()
       .then(list => {
-        res.send(list + ' List saved to database');
+        res.send(list);
       })
       .catch(err => {
-        res.status(400).send(err + 'Unable to save to database');
+        // // res.status(400).send(err + 'Unable to save to database');
+        // console.log(err);
+        // return null;
+        return next(err);
       });
   },
 
   showLists: function(req, res) {
     List.find({}, { previousState: 0 })
       .lean()
-      .then(lists => res.send(lists))
+      .then(lists => res.send({ lists }))
       .catch(err => res.status(422).send(err + 'Unable to find list'));
   },
 
@@ -94,11 +97,11 @@ module.exports = {
   //TODO: is there a mongoose query that will detel
   deleteList: function(req, res) {
     let id = req.params.id;
-    List.findByIdAndRemove(id, function(err, offer) {
+    List.findByIdAndRemove(id, function(err, list) {
       if (err) {
         throw err;
       }
-      res.send(offer);
+      res.send(list);
     });
   }
 };

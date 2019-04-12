@@ -6,14 +6,17 @@ module.exports = {
     req.checkBody('listID', 'Please select which list you want to add your task to').notEmpty();
     req.checkBody('taskTitle', 'Please provide a name for your task').notEmpty();
 
-    req.getValidationResult().then(result => {
-      if (!result.isEmpty()) {
-        res.send({
-          result: 'failed',
-          message: `validation errors: ${util.inspect(result.array())}`
-        });
-      }
-    });
+    req
+      .getValidationResult()
+      .then(result => {
+        if (!result.isEmpty()) {
+          res.send({
+            result: 'failed',
+            message: `validation errors: ${util.inspect(result.array())}`
+          });
+        }
+      })
+      .catch(err => console.log(err));
     const listID = req.body.listID;
     const taskTitle = req.body.taskTitle;
     const taskDescription = req.body.taskDescription;
@@ -27,15 +30,26 @@ module.exports = {
       previousTaskState: ''
     };
 
-    List.findById(listID)
-      .then(list => {
-        list.tasks.push(newTask);
-        list.incomplete_count.tasks += 1;
-        return list.save();
-      })
-      .then(task => res.send(task + ' Task was successfully added'))
-      // .catch(err => res.status(500).send(err + '  Failed to save task'));
-      .catch(err => res.status(404).send(err));
+    // List.findById(listID)
+    //   .then(list => {
+    //     list.tasks.push(newTask);
+    //     list.incomplete_count.tasks += 1;
+    //     return list.save();
+    //   })
+    //   .then(task => res.send(task))
+    //   .catch(err => res.status(404).send(err));
+    let query = { _id: listID };
+    let update = { $push: { tasks: newTask } };
+    let options = { new: true };
+    List.findOneAndUpdate(query, update, options, (err, doc) => {
+      if (err) {
+        throw err;
+      }
+      // let tasks = doc.tasks[tasks.length - 1];
+      res.send(doc.tasks[doc.tasks.length - 1]);
+    });
+    // .then(task => res.send(task))
+    // .catch(err => res.status(404).send(err));
   },
 
   getTasks: function(req, res) {

@@ -27,7 +27,7 @@ const taskSchema = mongoose.Schema({
 });
 
 const listSchema = mongoose.Schema({
-  title: { type: String, unique: true },
+  title: { type: String },
   completed: {
     status: { type: String, default: 'pending' },
     completed_at: { type: Date, required: false }
