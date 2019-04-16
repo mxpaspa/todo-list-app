@@ -40,29 +40,35 @@ class TaskTable extends Component {
           <br />
         </form>
         <div>
-          {this.props.tasks.map(todo => {
-            return (
-              <div className="list-group" key={todo._id} style={{ marginTop: '30px' }}>
-                <a
-                  href="#"
-                  key={todo._id}
-                  className="list-group-item"
-                  onClick={() => console.log('task id: ', todo._id)}
-                >
-                  {todo.title}
-                </a>
-                <div className="col-sm-2">
-                  <button
-                    key={todo._id}
-                    className="btn btn-secondary btn-sm"
-                    // onClick={() => {
-                    //   this.props.onDeleteList(list._id);
-                    // }}
-                  />
+          <ul className="list-group" style={{ width: '900px' }}>
+            {this.props.tasks.map(todo => {
+              return (
+                <div className="row">
+                  <div className="col-sm-1">
+                    <input type="checkbox" aria-label="Checkbox for following text input" />
+                  </div>
+
+                  <div className="col-lg-10">
+                    <li
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                      key={todo._id}
+                      style={{
+                        textDecoration:
+                          todo.completed.status == 'completed' ? 'line-through' : 'none'
+                      }}
+                    >
+                      {todo.title}
+                      {todo.completed.status}
+                      {/* <span class="badge badge-primary badge-pill">
+                        {todo.completed.completed_at}
+                      </span> */}
+                      <button key={todo._id} className="btn btn-secondary btn-sm" />
+                    </li>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </ul>
         </div>
       </div>
     );
@@ -71,8 +77,7 @@ class TaskTable extends Component {
 
 const mapStatetoProps = state => {
   return {
-    tasks: state.TaskReducer.tasks,
-    newTask: state.TaskReducer.task,
+    tasks: state.ListReducer.tasks,
     error: state.error,
     data: state.data,
     currentListId: state.ListReducer.currentListId

@@ -13,20 +13,19 @@ export const fetchData = () => {
   };
 };
 
-// export const fetchTasks = id => {
-//   return dispatch => {
-//     axios
-//       .get('http://localhost:5000/tasks', {
-//         params: {
-//           listID: id
-//         }
-//       })
-//       .then(res => dispatch({ type: 'FetchTasks', tasks: res.data }))
-//       .catch(res => {
-//         return Promise.reject(res);
-//       });
-//   };
-// };
+export const toggleList = id => {
+  return dispatch => {
+    axios
+      .put(`http://localhost:5000/lists/${id}/toggle_completion`)
+      .then(res => {
+        console.log('ToggleList action');
+        dispatch({ type: 'ToggleList', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
 
 export const addList = title => {
   return dispatch => {

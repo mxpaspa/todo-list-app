@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchData, deleteList, addList, setCurrentListId } from '../actions/listActions';
+import {
+  fetchData,
+  deleteList,
+  addList,
+  setCurrentListId,
+  toggleList
+} from '../actions/listActions';
 import { fetchTasks } from '../actions/taskActions';
 
 class ListNav extends Component {
@@ -29,19 +35,14 @@ class ListNav extends Component {
           <h3>Bootstrap Sidebar</h3>
         </div>
         <form name="list_nav" className="form-horizontal" onSubmit={this.handleSubmit}>
-          {/* <div className="form-group row"> */}
           <div className="input-group">
-            {/* <div className="form-group"> */}
-            {/* <div className="col-sm-5"> */}
             <input
               onChange={e => this.handleBodyChange(e)}
               type="text"
               className="form-control col-md-12"
               id="inputEmail3"
             />
-            {/* </div> */}
-            {/* </div> */}
-            {/* <div className="form-group"> */}
+
             <span className="input-group-btn">
               <div className="col-sm-2">
                 <button type="submit" id="list_nav_submit" className="btn-default btn">
@@ -49,13 +50,10 @@ class ListNav extends Component {
                 </button>
               </div>
             </span>
-            {/* </div> */}
           </div>
-
-          {/* </div> */}
         </form>
 
-        <ul className="list-unstyled components">
+        <ul className="list-group">
           {this.props.listArr.map(list => {
             return (
               <li key={list._id}>
@@ -65,12 +63,23 @@ class ListNav extends Component {
                     width: '250px'
                   }}
                 >
+                  <div className="col-sm-1">
+                    <input
+                      type="checkbox"
+                      onChange={() => {
+                        this.props.onToggleList(list._id);
+                        // this.props.onFetchTasks(list._id);
+                      }}
+                      aria-label="Checkbox for toggling list completion"
+                    />
+                  </div>
                   <div
                     key={list._id}
                     value={list._id}
-                    className="col-sm-9"
+                    className="col-sm-8"
                     style={{
-                      backgroundColor: list._id == this.props.currentListId ? 'black' : '#7386D5'
+                      backgroundColor: list._id == this.props.currentListId ? 'black' : '#7386D5',
+                      textDecoration: list.completed.status == 'completed' ? 'line-through' : 'none'
                     }}
                     onClick={() => {
                       this.props.onFetchTasks(list._id);
@@ -79,7 +88,7 @@ class ListNav extends Component {
                   >
                     {list.title}
                   </div>
-                  <div className="col-sm-2">
+                  <div className="col-sm-1">
                     <button
                       key={list._id}
                       className="btn btn-secondary btn-sm"
@@ -115,7 +124,8 @@ const mapDispatchprops = dispatch => {
     onFetchTasks: id => dispatch(fetchTasks(id)),
     onAddList: listTitle => dispatch(addList(listTitle)),
     onDeleteList: id => dispatch(deleteList(id)),
-    onSetCurrentListId: id => dispatch(setCurrentListId(id))
+    onSetCurrentListId: id => dispatch(setCurrentListId(id)),
+    onToggleList: id => dispatch(toggleList(id))
   };
 };
 
