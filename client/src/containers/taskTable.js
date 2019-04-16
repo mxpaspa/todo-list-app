@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTodo } from '../actions/taskActions';
-import { fetchTasks } from '../actions/taskActions';
+import { setCurrentTaskId } from '../actions/taskActions';
 // import { deleteTodo, toggleTodo, setVisibilityFilter } from '../actions/actionCreator';
 
 class TaskTable extends Component {
@@ -52,6 +52,10 @@ class TaskTable extends Component {
                     <li
                       className="list-group-item d-flex justify-content-between align-items-center"
                       key={todo._id}
+                      onClick={() => {
+                        this.props.onSetCurrentTaskId(todo._id);
+                        this.props.toggleTask(todo._id, this.props.currentListId);
+                      }}
                       style={{
                         textDecoration:
                           todo.completed.status == 'completed' ? 'line-through' : 'none'
@@ -80,14 +84,16 @@ const mapStatetoProps = state => {
     tasks: state.ListReducer.tasks,
     error: state.error,
     data: state.data,
-    currentListId: state.ListReducer.currentListId
+    currentListId: state.ListReducer.currentListId,
+    currentTaskId: state.ListReducer.currentTaskId
   };
 };
 
 const mapDispatchprops = dispatch => {
   return {
     onAddTodo: (id, taskTitle) => dispatch(addTodo(id, taskTitle)),
-    onFetchTasks: id => dispatch(fetchTasks(id))
+    onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
+    onToggleTask: id => dispatch(toggleTask)
   };
 };
 

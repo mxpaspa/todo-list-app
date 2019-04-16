@@ -57,9 +57,25 @@ export const addTodo = (id, taskTitle) => {
 //   };
 // };
 
+export const toggleList = (taskId, listID) => {
+  return dispatch => {
+    axios
+      .put(`http://localhost:5000/lists/${taskId}/toggle_completion`, {
+        listID: listId
+      })
+      .then(res => {
+        console.log('ToggleList action');
+        dispatch({ type: 'ToggleList', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
+
 export const setCurrentTaskId = id => {
   return dispatch => {
     console.log(id);
-    dispatch({ type: 'SetCurrentListId', currentListId: id });
+    dispatch({ type: 'SetCurrentTaskId', currentTaskId: id });
   };
 };
