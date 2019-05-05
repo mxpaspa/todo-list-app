@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTodo } from '../actions/taskActions';
 import { setCurrentTaskId } from '../actions/taskActions';
+import { toggleTask } from '../actions/taskActions';
 // import { deleteTodo, toggleTodo, setVisibilityFilter } from '../actions/actionCreator';
 
 class TaskTable extends Component {
@@ -54,7 +55,7 @@ class TaskTable extends Component {
                       key={todo._id}
                       onClick={() => {
                         this.props.onSetCurrentTaskId(todo._id);
-                        this.props.toggleTask(todo._id, this.props.currentListId);
+                        this.props.onToggleTask(todo._id, this.props.currentListId);
                       }}
                       style={{
                         textDecoration:
@@ -93,7 +94,7 @@ const mapDispatchprops = dispatch => {
   return {
     onAddTodo: (id, taskTitle) => dispatch(addTodo(id, taskTitle)),
     onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
-    onToggleTask: id => dispatch(toggleTask)
+    onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID))
   };
 };
 

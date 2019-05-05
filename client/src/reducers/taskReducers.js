@@ -16,6 +16,16 @@ const TaskReducer = (state = intialState, action) => {
       return { ...state, list: action.list };
     case 'SetCurrentTaskID':
       return { ...state, currentTaskId: action.currentTaskId };
+    case 'ToggleList':
+      console.log('toggle task reducer');
+      let toggleList = state.lists.find(list => list._id === action.data._id);
+      return {
+        ...state,
+        tasks: state.lists.map(list =>
+          list._id === action.data._id ? { ...list, completed: action.data.completed } : list
+        ),
+        tasks: action.data.tasks
+      };
     case 'ERROR':
       return { ...state, error: action.msg };
     default:

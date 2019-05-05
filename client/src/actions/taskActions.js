@@ -57,15 +57,15 @@ export const addTodo = (id, taskTitle) => {
 //   };
 // };
 
-export const toggleList = (taskId, listID) => {
+export const toggleTask = (taskId, listID) => {
   return dispatch => {
     axios
       .put(`http://localhost:5000/lists/${taskId}/toggle_completion`, {
-        listID: listId
+        listID: listID
       })
       .then(res => {
-        console.log('ToggleList action');
-        dispatch({ type: 'ToggleList', data: res.data });
+        console.log('toggleTask action');
+        dispatch({ type: 'toggleTask', data: res.data });
       })
       .catch(res => {
         return Promise.reject(res);
