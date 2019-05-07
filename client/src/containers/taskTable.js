@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { addTodo } from '../actions/taskActions';
 import { setCurrentTaskId } from '../actions/taskActions';
 import { toggleTask } from '../actions/taskActions';
+import { deleteTask } from '../actions/taskActions';
 // import { deleteTodo, toggleTodo, setVisibilityFilter } from '../actions/actionCreator';
 
 class TaskTable extends Component {
@@ -46,28 +47,42 @@ class TaskTable extends Component {
               return (
                 <div className="row">
                   <div className="col-sm-1">
-                    <input type="checkbox" aria-label="Checkbox for following text input" />
+                    <input
+                      type="checkbox"
+                      aria-label="Checkbox for following text input"
+                      key={todo._id}
+                      onClick={() => {
+                        this.props.onSetCurrentTaskId(todo._id);
+                        this.props.onToggleTask(todo._id, this.props.currentListId);
+                      }}
+                    />
                   </div>
 
                   <div className="col-lg-10">
                     <li
                       className="list-group-item d-flex justify-content-between align-items-center"
                       key={todo._id}
-                      onClick={() => {
-                        this.props.onSetCurrentTaskId(todo._id);
-                        this.props.onToggleTask(todo._id, this.props.currentListId);
-                      }}
+                      // onClick={() => {
+                      //   // this.props.onSetCurrentTaskId(todo._id);
+                      //   this.props.onToggleTask(todo._id, this.props.currentListId);
+                      // }}
                       style={{
                         textDecoration:
-                          todo.completed.status == 'completed' ? 'line-through' : 'none'
+                          todo.completed.status === 'completed' ? 'line-through' : 'none'
                       }}
                     >
                       {todo.title}
-                      {todo.completed.status}
+                      {/* {todo.completed.status} */}
                       {/* <span class="badge badge-primary badge-pill">
                         {todo.completed.completed_at}
                       </span> */}
-                      <button key={todo._id} className="btn btn-secondary btn-sm" />
+                      <button
+                        key={todo._id}
+                        onClick={() => {
+                          this.props.onDeleteTask(todo._id, this.props.currentListId);
+                        }}
+                        className="btn btn-secondary btn-sm"
+                      />
                     </li>
                   </div>
                 </div>
@@ -94,7 +109,8 @@ const mapDispatchprops = dispatch => {
   return {
     onAddTodo: (id, taskTitle) => dispatch(addTodo(id, taskTitle)),
     onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
-    onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID))
+    onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID)),
+    onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID))
   };
 };
 

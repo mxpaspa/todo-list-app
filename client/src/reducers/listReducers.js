@@ -11,7 +11,7 @@ const ListReducer = (state = intialState, action) => {
       return { ...state, lists: action.data };
     case 'ToggleList':
       console.log('toggle reducer');
-      let toggleList = state.lists.find(list => list._id === action.data._id);
+      // let toggleList = state.lists.find(list => list._id === action.data._id);
       return {
         ...state,
         lists: state.lists.map(list =>
@@ -31,10 +31,21 @@ const ListReducer = (state = intialState, action) => {
     case 'AddTodo':
       let newTask = state.tasks.concat(action.task);
       return { ...state, tasks: newTask };
-    case 'DeleteTodo':
-      return { ...state, list: action.list };
+    case 'DeleteTask':
+      console.log('delete task');
+      return { ...state, tasks: action.data.tasks };
     case 'SetCurrentTaskID':
       return { ...state, currentTaskId: action.currentTaskId };
+    case 'ToggleTask':
+      console.log('toggle task reducer');
+      // let toggleList = state.lists.find(list => list._id === action.data._id);
+      return {
+        ...state,
+        tasks: state.tasks.map(task =>
+          task._id === action.data._id ? { ...task, completed: action.data.completed } : task
+        )
+        // tasks: action.data.tasks
+      };
     case 'ERROR':
       return { ...state, error: action.msg };
     default:

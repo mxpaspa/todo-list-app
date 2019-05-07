@@ -58,7 +58,7 @@ export const deleteList = id => {
 
 export const setCurrentListId = id => {
   return dispatch => {
-    console.log(id);
+    console.log(`list id ${id}`);
     dispatch({ type: 'SetCurrentListId', currentListId: id });
   };
 };

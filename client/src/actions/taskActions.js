@@ -43,29 +43,30 @@ export const addTodo = (id, taskTitle) => {
   };
 };
 
-// export const deleteTodo = id => {
-//   return dispatch => {
-//     axios
-//       .delete(`http://localhost:5000/lists/${id}`)
-//       .then(res => {
-//         // console.log(`list tile ${title}`);
-//         dispatch({ type: 'DeleteList', data: res.data });
-//       })
-//       .catch(res => {
-//         return Promise.reject(res);
-//       });
-//   };
-// };
+export const deleteTask = (taskID, listID) => {
+  console.log(`task id ${taskID}`);
+  return dispatch => {
+    axios
+      .delete(`http://localhost:5000/tasks/${taskID}`, { data: { listID: listID } })
+      .then(res => {
+        dispatch({ type: 'DeleteTask', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
 
 export const toggleTask = (taskId, listID) => {
   return dispatch => {
     axios
-      .put(`http://localhost:5000/lists/${taskId}/toggle_completion`, {
+      .put(`http://localhost:5000/tasks/${taskId}/toggle_completion`, {
         listID: listID
       })
       .then(res => {
-        console.log('toggleTask action');
-        dispatch({ type: 'toggleTask', data: res.data });
+        console.log(listID);
+        console.log(res.data);
+        dispatch({ type: 'ToggleTask', data: res.data });
       })
       .catch(res => {
         return Promise.reject(res);

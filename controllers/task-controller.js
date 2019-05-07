@@ -81,6 +81,10 @@ module.exports = {
         list.tasks.id(taskID).remove();
         return list.save();
       })
+      // .then(list => {
+      //   let task = list.tasks.find(task => task.id === taskID);
+      //   res.send(task);
+      // })
       .then(doc => res.send(doc))
       .catch(err => res.status(422).send(err));
   },
@@ -130,7 +134,8 @@ module.exports = {
         return list.save();
       })
       .then(list => {
-        res.send(list + ' List saved to database');
+        let task = list.tasks.filter(task => task.id === taskID);
+        res.send(task[0]);
       })
       .catch(err => {
         res.status(400).send(err);
