@@ -1,24 +1,13 @@
 import React, { Component } from 'react';
-import Table from './containers/Table';
 import ListNav from './containers/listNav';
 import TaskTable from './containers/taskTable';
-import { fetchData } from './actions/listActions';
-import { connect } from 'react-redux';
 
 class App extends Component {
-  // state = {};
-  // componentDidMount() {
-  //   this.props.onFetchData();
-  // }
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="App">
-        <div className="wrapper" style={{ display: 'flex', width: '100%' }}>
-          <nav
+        {/* <div className="wrapper" style={{ display: 'flex', width: '100%' }}> */}
+        {/* <nav
             id="sidebar"
             style={{
               // display: 'inline-block',
@@ -34,24 +23,42 @@ class App extends Component {
             }}
           >
             <ListNav />
-          </nav>
+          </nav> */}
 
-          <div
+        {/* <div
             id="content"
             className="container"
-            style={{
-              // display: 'inline-block',
-              // marginTop: '80px',
-              padding: '40px',
-              top: 0,
-              right: 0,
-              position: 'absolute',
-              // float: 'right',
-              minBlockSize: '100vh',
-              width: 'calc(100%-250px)'
-            }}
+            // style={{
+            //   // display: 'inline-block',
+            //   // marginTop: '80px',
+            //   padding: '40px',
+            //   top: 0,
+            //   right: 0,
+            //   position: 'absolute',
+            //   // float: 'right',
+            //   minBlockSize: '100vh',
+            //   width: 'calc(100%-250px)'
+            // }}
           >
             <TaskTable />
+          </div> */}
+        {/* </div> */}
+        <div className="container-fluid">
+          <div className="row">
+            <div
+              className="col-3"
+              style={{
+                height: '100vh',
+                backgroundColor: 'rgb(115, 134, 213)'
+              }}
+            >
+              <ListNav />
+            </div>
+            <div className="col-9">
+              <div style={{ textAlign: 'center' }}>
+                <TaskTable />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,18 +1,5 @@
 import axios from 'axios';
 
-// export const fetchData = () => {
-//   return dispatch => {
-//     axios
-//       .get('http://localhost:5000/lists')
-//       .then(res => {
-//         dispatch({ type: 'FetchData', data: res.data.lists });
-//       })
-//       .catch(res => {
-//         return Promise.reject(res);
-//       });
-//   };
-// };
-
 export const fetchTasks = id => {
   return dispatch => {
     axios

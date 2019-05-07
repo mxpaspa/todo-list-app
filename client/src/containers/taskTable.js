@@ -22,74 +22,70 @@ class TaskTable extends Component {
 
   render() {
     return (
-      <div id="container" className="col-md-8 col-md-offset-2 ">
+      // <div id="container" className="col-md-8 col-md-offset-2 ">
+
+      <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '40px' }}>
         <form onSubmit={this.handleSubmit}>
           <div className="input-group">
             <input
-              className="form-control col-md-12"
+              className="form-control"
               onChange={e => this.handleBodyChange(e)}
               type="text"
               className="form-control"
               id="addTask"
             />
             <span className="input-group-btn">
-              <button type="submit" id="list_nav_submit" className="btn-default btn">
+              <button type="submit" id="list_nav_submit" className="btn btn-primary btn-lg">
                 Submit
               </button>
             </span>
           </div>
 
           <br />
-        </form>
-        <div>
-          <ul className="list-group" style={{ width: '900px' }}>
+          <ul className="list-group">
             {this.props.tasks.map(todo => {
               return (
-                <div className="row">
-                  <div className="col-sm-1">
-                    <input
-                      type="checkbox"
-                      aria-label="Checkbox for following text input"
-                      key={todo._id}
-                      onClick={() => {
-                        this.props.onSetCurrentTaskId(todo._id);
-                        this.props.onToggleTask(todo._id, this.props.currentListId);
-                      }}
-                    />
-                  </div>
-
-                  <div className="col-lg-10">
-                    <li
-                      className="list-group-item d-flex justify-content-between align-items-center"
-                      key={todo._id}
-                      // onClick={() => {
-                      //   // this.props.onSetCurrentTaskId(todo._id);
-                      //   this.props.onToggleTask(todo._id, this.props.currentListId);
-                      // }}
-                      style={{
-                        textDecoration:
-                          todo.completed.status === 'completed' ? 'line-through' : 'none'
-                      }}
-                    >
-                      {todo.title}
-                      {/* {todo.completed.status} */}
-                      {/* <span class="badge badge-primary badge-pill">
-                        {todo.completed.completed_at}
-                      </span> */}
-                      <button
+                <div className="form-group-row">
+                  <li
+                    className="list-group-item d-flex justify-content-between align-items-center"
+                    key={todo._id}
+                    style={{
+                      textDecoration:
+                        todo.completed.status === 'completed' ? 'line-through' : 'none'
+                    }}
+                  >
+                    <span>
+                      <input
+                        type="checkbox"
+                        aria-label="Checkbox for following text input"
                         key={todo._id}
                         onClick={() => {
-                          this.props.onDeleteTask(todo._id, this.props.currentListId);
+                          this.props.onSetCurrentTaskId(todo._id);
+                          this.props.onToggleTask(todo._id, this.props.currentListId);
                         }}
-                        className="btn btn-secondary btn-sm"
                       />
-                    </li>
-                  </div>
+                    </span>
+                    {todo.title}
+                    {/* {todo.completed.status} */}
+                    {/* <span class="badge badge-primary badge-pill">
+                        {todo.completed.completed_at}
+                      </span> */}
+
+                    <button
+                      key={todo._id}
+                      onClick={() => {
+                        this.props.onDeleteTask(todo._id, this.props.currentListId);
+                      }}
+                      className="btn btn-secondary btn-sm"
+                    />
+                  </li>
+
+                  {/* </div> */}
                 </div>
               );
             })}
           </ul>
-        </div>
+        </form>
       </div>
     );
   }

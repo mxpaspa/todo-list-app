@@ -53,15 +53,15 @@ class ListNav extends Component {
           </div>
         </form>
 
-        <ul className="list-group">
+        <ul className="list-group" style={{ listStyleType: 'none' }}>
           {this.props.listArr.map(list => {
             return (
               <li key={list._id}>
                 <div
                   className="row"
-                  style={{
-                    width: '250px'
-                  }}
+                  // style={{
+                  //   width: '250px'
+                  // }}
                 >
                   <div className="col-sm-1">
                     <input
