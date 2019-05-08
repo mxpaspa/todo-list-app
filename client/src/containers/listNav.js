@@ -32,23 +32,27 @@ class ListNav extends Component {
     return (
       <div>
         <div className="sidebar-header">
-          <h3>Bootstrap Sidebar</h3>
+          <h3>Todo List App</h3>
         </div>
         <form name="list_nav" className="form-horizontal" onSubmit={this.handleSubmit}>
-          <div className="input-group">
+          <div className="input-group align-items-center">
             <input
               onChange={e => this.handleBodyChange(e)}
               type="text"
-              className="form-control col-md-12"
+              className="form-control col-sm-10"
               id="inputEmail3"
+              style={{ borderRadius: '5px' }}
             />
 
             <span className="input-group-btn">
-              <div className="col-sm-2">
-                <button type="submit" id="list_nav_submit" className="btn-default btn">
-                  Submit
-                </button>
-              </div>
+              {/* <div className="col-sm-2"> */}
+              <button
+                className="btn  btn-sm btn-primary btn-circle"
+                style={{ borderRadius: '30px' }}
+              >
+                <i className="fa fa-plus" />
+              </button>
+              {/* </div> */}
             </span>
           </div>
         </form>
@@ -56,48 +60,45 @@ class ListNav extends Component {
         <ul className="list-group" style={{ listStyleType: 'none' }}>
           {this.props.listArr.map(list => {
             return (
-              <li key={list._id}>
+              <li
+                className="list-group-item d-flex align-items-center"
+                key={list._id}
+                style={{ backgroundColor: 'transparent', border: 'none' }}
+              >
+                <input
+                  type="checkbox"
+                  onChange={() => {
+                    this.props.onToggleList(list._id);
+                  }}
+                  aria-label="Checkbox for toggling list completion"
+                />
+
                 <div
-                  className="row"
-                  // style={{
-                  //   width: '250px'
-                  // }}
+                  key={list._id}
+                  value={list._id}
+                  className="col-sm-4"
+                  style={{
+                    backgroundColor:
+                      list._id === this.props.currentListId ? 'rgb(203, 210, 239)' : '#7386D5',
+                    borderRadius: '25px',
+                    // list._id === this.props.currentListId ? '' : '#7386D5',
+                    textDecoration: list.completed.status === 'completed' ? 'line-through' : 'none'
+                  }}
+                  onClick={() => {
+                    this.props.onFetchTasks(list._id);
+                    this.props.onSetCurrentListId(list._id);
+                  }}
                 >
-                  <div className="col-sm-1">
-                    <input
-                      type="checkbox"
-                      onChange={() => {
-                        this.props.onToggleList(list._id);
-                        // this.props.onFetchTasks(list._id);
-                      }}
-                      aria-label="Checkbox for toggling list completion"
-                    />
-                  </div>
-                  <div
-                    key={list._id}
-                    value={list._id}
-                    className="col-sm-8"
-                    style={{
-                      backgroundColor: list._id == this.props.currentListId ? 'black' : '#7386D5',
-                      textDecoration: list.completed.status == 'completed' ? 'line-through' : 'none'
-                    }}
-                    onClick={() => {
-                      this.props.onFetchTasks(list._id);
-                      this.props.onSetCurrentListId(list._id);
-                    }}
-                  >
-                    {list.title}
-                  </div>
-                  <div className="col-sm-1">
-                    <button
-                      key={list._id}
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => {
-                        this.props.onDeleteList(list._id);
-                      }}
-                    />
-                  </div>
+                  {list.title}
                 </div>
+
+                <button
+                  key={list._id}
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => {
+                    this.props.onDeleteList(list._id);
+                  }}
+                />
               </li>
             );
           })}

@@ -31,7 +31,6 @@ class TaskTable extends Component {
               className="form-control"
               onChange={e => this.handleBodyChange(e)}
               type="text"
-              className="form-control"
               id="addTask"
             />
             <span className="input-group-btn">
@@ -42,50 +41,50 @@ class TaskTable extends Component {
           </div>
 
           <br />
-          <ul className="list-group">
-            {this.props.tasks.map(todo => {
-              return (
-                <div className="form-group-row">
-                  <li
-                    className="list-group-item d-flex justify-content-between align-items-center"
-                    key={todo._id}
-                    style={{
-                      textDecoration:
-                        todo.completed.status === 'completed' ? 'line-through' : 'none'
-                    }}
-                  >
-                    <span>
-                      <input
-                        type="checkbox"
-                        aria-label="Checkbox for following text input"
-                        key={todo._id}
-                        onClick={() => {
-                          this.props.onSetCurrentTaskId(todo._id);
-                          this.props.onToggleTask(todo._id, this.props.currentListId);
-                        }}
-                      />
-                    </span>
-                    {todo.title}
-                    {/* {todo.completed.status} */}
-                    {/* <span class="badge badge-primary badge-pill">
-                        {todo.completed.completed_at}
-                      </span> */}
-
-                    <button
-                      key={todo._id}
-                      onClick={() => {
-                        this.props.onDeleteTask(todo._id, this.props.currentListId);
-                      }}
-                      className="btn btn-secondary btn-sm"
-                    />
-                  </li>
-
-                  {/* </div> */}
-                </div>
-              );
-            })}
-          </ul>
         </form>
+        <ul className="list-group">
+          {this.props.tasks.map(todo => {
+            return (
+              // <div className="form-group-row">
+              <li
+                className={
+                  'list-group-item d-flex align-items-center ' +
+                  (todo.completed.status === 'completed' ? 'disabled' : '')
+                }
+                key={todo._id}
+                style={{
+                  marginBottom: '20px',
+                  borderRadius: '5px'
+                  // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
+                }}
+              >
+                <div className="col-sm-1">
+                  <input
+                    type="checkbox"
+                    aria-label="Checkbox for following text input"
+                    key={todo._id}
+                    onClick={() => {
+                      this.props.onSetCurrentTaskId(todo._id);
+                      this.props.onToggleTask(todo._id, this.props.currentListId);
+                    }}
+                  />
+                </div>
+                <div className="col-sm-10">
+                  <div style={{ float: 'left' }}>{todo.title}</div>
+                </div>
+                <div className="col-sm-1">
+                  <button
+                    key={todo._id}
+                    onClick={() => {
+                      this.props.onDeleteTask(todo._id, this.props.currentListId);
+                    }}
+                    className="btn btn-secondary btn-sm"
+                  />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     );
   }
