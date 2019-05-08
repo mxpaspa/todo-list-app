@@ -63,9 +63,15 @@ class ListNav extends Component {
               <li
                 className="list-group-item d-flex align-items-center"
                 key={list._id}
-                style={{ backgroundColor: 'transparent', border: 'none' }}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  display: 'block',
+                  padding: '0px 0px !important'
+                }}
               >
                 <input
+                  // style={{ left: '0px' }}
                   type="checkbox"
                   onChange={() => {
                     this.props.onToggleList(list._id);
@@ -76,7 +82,7 @@ class ListNav extends Component {
                 <div
                   key={list._id}
                   value={list._id}
-                  className="col-sm-4"
+                  className="col-sm-8"
                   style={{
                     backgroundColor:
                       list._id === this.props.currentListId ? 'rgb(203, 210, 239)' : '#7386D5',
@@ -95,6 +101,7 @@ class ListNav extends Component {
                 <button
                   key={list._id}
                   className="btn btn-secondary btn-sm"
+                  style={{ float: 'right', marginLeft: '15px' }}
                   onClick={() => {
                     this.props.onDeleteList(list._id);
                   }}
