@@ -24,7 +24,7 @@ class TaskTable extends Component {
     return (
       // <div id="container" className="col-md-8 col-md-offset-2 ">
 
-      <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '40px' }}>
+      <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '50px' }}>
         <form onSubmit={this.handleSubmit}>
           <div className="input-group">
             <input

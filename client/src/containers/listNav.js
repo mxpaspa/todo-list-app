@@ -34,30 +34,36 @@ class ListNav extends Component {
         <div className="sidebar-header">
           <h3>Todo List App</h3>
         </div>
+
         <form name="list_nav" className="form-horizontal" onSubmit={this.handleSubmit}>
           <div className="input-group align-items-center">
-            <input
-              onChange={e => this.handleBodyChange(e)}
-              type="text"
-              className="form-control col-sm-10"
-              id="inputEmail3"
-              style={{ borderRadius: '5px' }}
-            />
+            <div className="col-sm-10" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
+              <input
+                onChange={e => this.handleBodyChange(e)}
+                type="text"
+                className="form-control "
+                id="inputEmail3"
+                style={{ borderRadius: '5px' }}
+              />
+            </div>
 
-            <span className="input-group-btn">
-              {/* <div className="col-sm-2"> */}
-              <button
-                className="btn  btn-sm btn-primary btn-circle"
-                style={{ borderRadius: '30px' }}
-              >
-                <i className="fa fa-plus" />
-              </button>
-              {/* </div> */}
-            </span>
+            <div
+              className="col-sm-2 d-flex justify-content-center"
+              style={{ paddingLeft: '0px', paddingRight: '0px' }}
+            >
+              <span className="input-group-btn">
+                <button
+                  className="btn  btn-sm btn-primary btn-circle"
+                  style={{ borderRadius: '30px' }}
+                >
+                  <i className="fa fa-plus" />
+                </button>
+              </span>
+            </div>
           </div>
         </form>
 
-        <ul className="list-group" style={{ listStyleType: 'none' }}>
+        <ul className="list-group" style={{ listStyleType: 'none', marginTop: '10px' }}>
           {this.props.listArr.map(list => {
             return (
               <li
@@ -67,26 +73,26 @@ class ListNav extends Component {
                   backgroundColor: 'transparent',
                   border: 'none',
                   display: 'block',
-                  padding: '0px 0px !important'
+                  paddingLeft: '0px',
+                  paddingRight: '0px',
+                  paddingTop: '0px',
+                  paddingBottom: '0px',
+                  marginBottom: '2px'
                 }}
               >
-                <input
-                  // style={{ left: '0px' }}
-                  type="checkbox"
-                  onChange={() => {
-                    this.props.onToggleList(list._id);
-                  }}
-                  aria-label="Checkbox for toggling list completion"
-                />
-
                 <div
                   key={list._id}
                   value={list._id}
-                  className="col-sm-8"
+                  className="col-sm-10"
                   style={{
+                    paddingLeft: '0px',
+                    paddingRight: '0px',
+                    paddingTop: '0px',
+                    paddingBottom: '0px',
+                    width: '100%',
                     backgroundColor:
                       list._id === this.props.currentListId ? 'rgb(203, 210, 239)' : '#7386D5',
-                    borderRadius: '25px',
+                    borderRadius: '5px',
                     // list._id === this.props.currentListId ? '' : '#7386D5',
                     textDecoration: list.completed.status === 'completed' ? 'line-through' : 'none'
                   }}
@@ -95,17 +101,29 @@ class ListNav extends Component {
                     this.props.onSetCurrentListId(list._id);
                   }}
                 >
+                  <input
+                    style={{ marginRight: '10px', marginLeft: '5px' }}
+                    type="checkbox"
+                    onChange={() => {
+                      this.props.onToggleList(list._id);
+                    }}
+                    aria-label="Checkbox for toggling list completion"
+                  />
                   {list.title}
                 </div>
-
-                <button
-                  key={list._id}
-                  className="btn btn-secondary btn-sm"
-                  style={{ float: 'right', marginLeft: '15px' }}
-                  onClick={() => {
-                    this.props.onDeleteList(list._id);
-                  }}
-                />
+                <div
+                  className="col-sm-2 d-flex justify-content-center"
+                  style={{ paddingLeft: '0px', paddingRight: '0px' }}
+                >
+                  <button
+                    key={list._id}
+                    className="btn btn-secondary btn-sm"
+                    // style={{ float: 'right' }}
+                    onClick={() => {
+                      this.props.onDeleteList(list._id);
+                    }}
+                  />
+                </div>
               </li>
             );
           })}
