@@ -29,6 +29,7 @@ class TaskTable extends Component {
           <div className="input-group">
             <input
               className="form-control"
+              style={{ marginRight: '5px', borderRadius: '5px' }}
               onChange={e => this.handleBodyChange(e)}
               type="text"
               id="addTask"
@@ -73,13 +74,23 @@ class TaskTable extends Component {
                   <div style={{ float: 'left' }}>{todo.title}</div>
                 </div>
                 <div className="col-sm-1">
-                  <button
+                  {/* <button
                     key={todo._id}
                     onClick={() => {
                       this.props.onDeleteTask(todo._id, this.props.currentListId);
                     }}
                     className="btn btn-secondary btn-sm"
-                  />
+                  /> */}
+                  <button
+                    key={todo._id}
+                    className="btn btn-sm"
+                    style={{ backgroundColor: 'transparent' }}
+                    onClick={() => {
+                      this.props.onDeleteTask(todo._id, this.props.currentListId);
+                    }}
+                  >
+                    <i className="fa fa-minus-circle" aria-hidden="true" />
+                  </button>
                 </div>
               </li>
             );

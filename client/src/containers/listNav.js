@@ -42,7 +42,7 @@ class ListNav extends Component {
                 onChange={e => this.handleBodyChange(e)}
                 type="text"
                 className="form-control "
-                id="inputEmail3"
+                id="todo-input"
                 style={{ borderRadius: '5px' }}
               />
             </div>
@@ -52,10 +52,7 @@ class ListNav extends Component {
               style={{ paddingLeft: '0px', paddingRight: '0px' }}
             >
               <span className="input-group-btn">
-                <button
-                  className="btn  btn-sm btn-primary btn-circle"
-                  style={{ borderRadius: '30px' }}
-                >
+                <button className="btn  btn-sm btn-circle" style={{ borderRadius: '30px' }}>
                   <i className="fa fa-plus" />
                 </button>
               </span>
@@ -83,7 +80,7 @@ class ListNav extends Component {
                 <div
                   key={list._id}
                   value={list._id}
-                  className="col-sm-10"
+                  className="col-sm-10 d-flex align-items-center "
                   style={{
                     paddingLeft: '0px',
                     paddingRight: '0px',
@@ -117,12 +114,14 @@ class ListNav extends Component {
                 >
                   <button
                     key={list._id}
-                    className="btn btn-secondary btn-sm"
-                    // style={{ float: 'right' }}
+                    className="btn btn-sm"
+                    style={{ backgroundColor: 'transparent' }}
                     onClick={() => {
                       this.props.onDeleteList(list._id);
                     }}
-                  />
+                  >
+                    <i className="fa fa-minus-circle" aria-hidden="true" />
+                  </button>
                 </div>
               </li>
             );
