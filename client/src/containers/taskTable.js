@@ -4,7 +4,7 @@ import { addTodo } from '../actions/taskActions';
 import { setCurrentTaskId } from '../actions/taskActions';
 import { toggleTask } from '../actions/taskActions';
 import { deleteTask } from '../actions/taskActions';
-// import { deleteTodo, toggleTodo, setVisibilityFilter } from '../actions/actionCreator';
+import { showSubTaskPanel } from '../actions/subTaskActions';
 
 class TaskTable extends Component {
   state = {};
@@ -12,6 +12,7 @@ class TaskTable extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.onAddTodo(this.props.currentListId, this.state.taskTitle);
+    e.target.reset();
   };
 
   handleBodyChange(e) {
@@ -22,8 +23,6 @@ class TaskTable extends Component {
 
   render() {
     return (
-      // <div id="container" className="col-md-8 col-md-offset-2 ">
-
       <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '50px' }}>
         <form onSubmit={this.handleSubmit}>
           <div className="input-group">
@@ -46,7 +45,6 @@ class TaskTable extends Component {
         <ul className="list-group">
           {this.props.tasks.map(todo => {
             return (
-              // <div className="form-group-row">
               <li
                 className={
                   'list-group-item d-flex align-items-center ' +
@@ -57,6 +55,9 @@ class TaskTable extends Component {
                   marginBottom: '20px',
                   borderRadius: '5px'
                   // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
+                }}
+                onClick={() => {
+                  this.props.onShowSubTaskPanel();
                 }}
               >
                 <div className="col-sm-1">
@@ -70,17 +71,15 @@ class TaskTable extends Component {
                     }}
                   />
                 </div>
-                <div className="col-sm-10">
+                <div
+                  className="col-sm-10"
+                  onClick={() => {
+                    this.props.onSetCurrentTaskId(todo._id);
+                  }}
+                >
                   <div style={{ float: 'left' }}>{todo.title}</div>
                 </div>
                 <div className="col-sm-1">
-                  {/* <button
-                    key={todo._id}
-                    onClick={() => {
-                      this.props.onDeleteTask(todo._id, this.props.currentListId);
-                    }}
-                    className="btn btn-secondary btn-sm"
-                  /> */}
                   <button
                     key={todo._id}
                     className="btn btn-sm"
@@ -107,7 +106,8 @@ const mapStatetoProps = state => {
     error: state.error,
     data: state.data,
     currentListId: state.ListReducer.currentListId,
-    currentTaskId: state.ListReducer.currentTaskId
+    currentTaskId: state.ListReducer.currentTaskId,
+    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel
   };
 };
 
@@ -116,7 +116,8 @@ const mapDispatchprops = dispatch => {
     onAddTodo: (id, taskTitle) => dispatch(addTodo(id, taskTitle)),
     onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
     onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID)),
-    onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID))
+    onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID)),
+    onShowSubTaskPanel: () => dispatch(showSubTaskPanel())
   };
 };
 

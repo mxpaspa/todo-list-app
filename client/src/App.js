@@ -1,48 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ListNav from './containers/listNav';
 import TaskTable from './containers/taskTable';
+import SubTaskTable from './containers/subTaskTable';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <div className="wrapper" style={{ display: 'flex', width: '100%' }}> */}
-        {/* <nav
-            id="sidebar"
-            style={{
-              // display: 'inline-block',
-              width: '250px',
-              position: 'fixed',
-              top: '0',
-              left: '0',
-              height: '100vh',
-              // z-index: '999',
-              background: '#7386D5',
-              color: '#fff',
-              transition: 'all 0.3s'
-            }}
-          >
-            <ListNav />
-          </nav> */}
-
-        {/* <div
-            id="content"
-            className="container"
-            // style={{
-            //   // display: 'inline-block',
-            //   // marginTop: '80px',
-            //   padding: '40px',
-            //   top: 0,
-            //   right: 0,
-            //   position: 'absolute',
-            //   // float: 'right',
-            //   minBlockSize: '100vh',
-            //   width: 'calc(100%-250px)'
-            // }}
-          >
-            <TaskTable />
-          </div> */}
-        {/* </div> */}
         <div className="container-fluid">
           <div className="row">
             <div
@@ -54,11 +19,18 @@ class App extends Component {
             >
               <ListNav />
             </div>
-            <div className="col-9">
+            <div className={this.props.showSubTaskPanel ? 'col-7' : 'col-9'}>
               <div style={{ textAlign: 'center' }}>
                 <TaskTable />
               </div>
             </div>
+            {/* {this.props.showSubTaskPanel ? <SubTaskTable /> : null} */}
+            {this.props.showSubTaskPanel && (
+              // console.log('show sub task panel')
+              <div className="col-2">
+                <SubTaskTable />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -66,17 +38,16 @@ class App extends Component {
   }
 }
 
-// const mapStatetoProps = state => {
-//   return { data: state.data, error: state.error };
-// };
+const mapStatetoProps = state => {
+  return {
+    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel
+  };
+};
 
 // const mapDispatchprops = dispatch => {
 //   return { onFetchData: () => dispatch(fetchData()) };
 // };
 
-// export default connect(
-//   mapStatetoProps,
-//   mapDispatchprops
-// )(App);
+export default connect(mapStatetoProps)(App);
 
-export default App;
+// export default App;

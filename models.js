@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const subTaskSchema = mongoose.Schema({
   title: { type: String },
-  description: { type: String },
+  // description: { type: String },
   completed: {
     status: {
       type: String,

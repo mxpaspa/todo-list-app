@@ -2,6 +2,7 @@ const intialState = {
   lists: [],
   tasks: [],
   currentListId: '',
+  currentTaskId: '',
   bgColor: 'black'
 };
 
@@ -35,6 +36,7 @@ const ListReducer = (state = intialState, action) => {
       console.log('delete task');
       return { ...state, tasks: action.data.tasks };
     case 'SetCurrentTaskID':
+      // console.log(`taskID: ${currentTaskId}`);
       return { ...state, currentTaskId: action.currentTaskId };
     case 'ToggleTask':
       console.log('toggle task reducer');

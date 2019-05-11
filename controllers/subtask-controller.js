@@ -4,27 +4,27 @@ const expressValidator = require('express-validator');
 module.exports = {
   createSubTask: function(req, res) {
     //TODO:Move the validation stuff to a different module
-    req.checkBody('listID', 'Please select which list you want to add your task to').notEmpty();
-    req.checkBody('taskID', 'Please select which task you want to add your task to').notEmpty();
-    req.checkBody('subTaskTitle', 'Please provide a name for your subtask').notEmpty();
+    // req.checkBody('listID', 'Please select which list you want to add your task to').notEmpty();
+    // req.checkBody('taskID', 'Please select which task you want to add your task to').notEmpty();
+    // req.checkBody('subTaskTitle', 'Please provide a name for your subtask').notEmpty();
 
-    req.getValidationResult().then(result => {
-      if (!result.isEmpty()) {
-        res.send({
-          result: 'failed',
-          message: `validation errors: ${util.inspect(result.array())}`
-        });
-      }
-    });
+    // req.getValidationResult().then(result => {
+    //   if (!result.isEmpty()) {
+    //     res.send({
+    //       result: 'failed',
+    //       message: `validation errors: ${util.inspect(result.array())}`
+    //     });
+    //   }
+    // });
 
     const listID = req.body.listID;
     const taskID = req.body.taskID;
     const subTaskTitle = req.body.subTaskTitle;
-    const subTaskDescription = req.body.subTaskDescription;
+    // const subTaskDescription = req.body.subTaskDescription;
 
     const newSubTask = {
       title: subTaskTitle,
-      description: subTaskDescription,
+      // description: subTaskDescription,
       completed: {
         status: 'pending'
       }
@@ -37,7 +37,17 @@ module.exports = {
         list.incomplete_count.subTasks += 1;
         list
           .save()
-          .then(doc => res.send(doc))
+          .then(doc => {
+            // let subTasks = doc.tasks.find(task => {
+            //   if (task._id === taskID) {
+            //     return task.subTasks;
+            //   }
+            // });
+
+            //TODO: re-do this is terrible
+            let newTask = doc.tasks.filter(sTask => sTask === task);
+            res.send(newTask[0].subTasks[newTask[0].subTasks.length - 1]);
+          })
           .catch(err => res.status(400).send(err + "  Coudln't save subtask"));
       })
       .catch(err => res.status(400).send(err));

@@ -20,6 +20,7 @@ class ListNav extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.onAddList(this.state.listTitle);
+    e.target.reset();
   };
 
   handleBodyChange(e) {
