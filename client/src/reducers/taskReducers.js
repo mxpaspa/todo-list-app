@@ -12,8 +12,8 @@ const TaskReducer = (state = intialState, action) => {
     case 'AddTodo':
       let newTask = state.tasks.concat(action.task);
       return { ...state, tasks: newTask };
-    case 'DeleteTodo':
-      return { ...state, list: action.list };
+    // case 'DeleteTodo':
+    //   return { ...state, list: action.list };
     case 'SetCurrentTaskID':
       return { ...state, currentTaskId: action.currentTaskId };
     // case 'ToggleTask':

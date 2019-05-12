@@ -99,12 +99,44 @@ module.exports = {
       .catch(err => res.status(400).send(err));
   },
 
+  // deleteSubTasks: function(req, res) {
+  //   let subtaskID = req.params.subtaskID;
+  //   let taskID = req.body.taskID;
+  //   List.tasks
+  //     .findByIdAndRemove(id)
+  //     .then(id => res.send(id))
+  //     .catch(err => res.statu(400).send(err));
+  // }
+
   deleteSubTasks: function(req, res) {
-    let subtaskID = req.params.subtaskID;
+    let subTaskID = req.params.id;
     let taskID = req.body.taskID;
-    List.tasks
-      .findByIdAndRemove(id)
-      .then(id => res.send(id + 'deleted successfully'))
-      .catch(err => res.statu(400).send(err));
+    let listID = req.body.listID;
+
+    // console.log('test');
+    // List.findById(listID)
+    //   .then(list => {
+    //     list.tasks.id(taskID).subTasks.pull(subTaskID);
+    //     return list.save();
+    //   })
+    //   .then(list => res.send(list));
+
+    List.findById(listID)
+      .then(list => {
+        list.tasks
+          .id(taskID)
+          .subTasks.id(subTaskID)
+          .remove();
+        list.save().then(doc => res.send(doc));
+      })
+      .catch(err => res.status(400).send(err));
+
+    // List.findOneAndUpdate(
+    //   { 'List._id': listID },
+    //   { $pull: { 'List.$.subTasks': subTaskID } },
+    //   function(e, d) {
+    //     res.send(d); // d is the updated ObjectSchema
+    //   }
+    // );
   }
 };

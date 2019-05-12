@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSubTask } from '../actions/subTaskActions';
+import { addSubTask, deleteSubTask } from '../actions/subTaskActions';
 
 class SubTaskTable extends Component {
   state = {};
@@ -56,14 +56,24 @@ class SubTaskTable extends Component {
         <ul className="list-group" style={{ backgroundColor: 'black' }}>
           {this.props.subTasks.map(subTask => {
             return (
-              <li
-                className={'list-group-item d-flex align-items-center '}
-                key={subTask._id}
-                onClick={() => {
-                  console.log(this.props.currentListId);
-                }}
-              >
+              <li className={'list-group-item d-flex align-items-center '} key={subTask._id}>
                 {subTask.title}
+                <div className="col-sm-1">
+                  <button
+                    key={subTask._id}
+                    className="btn btn-sm"
+                    style={{ backgroundColor: 'transparent' }}
+                    onClick={() => {
+                      this.props.onDeleteSubTask(
+                        subTask._id,
+                        this.props.currentListId,
+                        this.props.currentTaskId
+                      );
+                    }}
+                  >
+                    <i className="fa fa-minus-circle" aria-hidden="true" />
+                  </button>
+                </div>
               </li>
             );
           })}
@@ -88,10 +98,12 @@ const mapStatetoProps = state => {
 const mapDispatchprops = dispatch => {
   return {
     onAddSubTask: (subTaskTitle, listID, taskID) =>
-      dispatch(addSubTask(subTaskTitle, listID, taskID))
+      dispatch(addSubTask(subTaskTitle, listID, taskID)),
+    // onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID))
     // onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
     // onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID)),
-    // onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID)),
+    onDeleteSubTask: (subTaskID, taskID, listID) =>
+      dispatch(deleteSubTask(subTaskID, taskID, listID))
     // onShowSubTaskPanel: () => dispatch(showSubTaskPanel())
   };
 };

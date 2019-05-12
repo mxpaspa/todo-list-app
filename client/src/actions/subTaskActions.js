@@ -6,10 +6,23 @@ export const showSubTaskPanel = () => {
   };
 };
 
+export const fetchSubTasks = (listID, taskID) => {
+  return dispatch => {
+    axios
+      .get('http://localhost:5000/subtasks', {
+        params: {
+          listID: listID,
+          taskID: taskID
+        }
+      })
+      .then(res => dispatch({ type: 'FetchSubTasks', subTasks: res.data }))
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
+
 export const addSubTask = (subTaskTitle, listID, taskID) => {
-  console.log('listID from subTaskAction: ', listID);
-  console.log('listID from subTaskAction: ', taskID);
-  console.log('listID from subTaskAction: ', subTaskTitle);
   return dispatch => {
     axios
       .post('http://localhost:5000/subtasks', {
@@ -20,6 +33,24 @@ export const addSubTask = (subTaskTitle, listID, taskID) => {
       .then(res => {
         console.log('from todo action: ', res.data);
         dispatch({ type: 'AddSubTask', subTask: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
+
+export const deleteSubTask = (subTaskID, listID, taskID) => {
+  console.log(`subTaskID ${subTaskID}`);
+  console.log(`taskID ${taskID}`);
+  console.log(`listID ${listID}`);
+  return dispatch => {
+    axios
+      .delete(`http://localhost:5000/subtasks/${subTaskID}`, {
+        data: { listID: listID, taskID: taskID }
+      })
+      .then(res => {
+        dispatch({ type: 'DeleteSubTask', data: res.data });
       })
       .catch(res => {
         return Promise.reject(res);

@@ -11,12 +11,14 @@ const SubTaskReducer = (state = intialState, action) => {
     // case 'AddTodo':
     //   let newTask = state.tasks.concat(action.task);
     //   return { ...state, tasks: newTask };
-    // case 'DeleteTodo':
-    //   return { ...state, list: action.list };
+    case 'DeleteSubTask':
+      return { ...state, subTasks: action.data };
     // case 'SetCurrentTaskID':
     //   return { ...state, currentTaskId: action.currentTaskId };
+    case 'FetchSubTasks':
+      return { ...state, subTasks: action.subTasks };
     case 'AddSubTask':
-      let newSubTask = state.tasks.concat(action.subTask);
+      let newSubTask = state.subTasks.concat(action.subTask);
       return { ...state, subTasks: newSubTask };
     case 'ShowSubTaskPanel':
       return { ...state, showSubTaskPanel: action.showSubTaskPanel };

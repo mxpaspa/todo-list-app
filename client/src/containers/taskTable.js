@@ -4,7 +4,7 @@ import { addTodo } from '../actions/taskActions';
 import { setCurrentTaskId } from '../actions/taskActions';
 import { toggleTask } from '../actions/taskActions';
 import { deleteTask } from '../actions/taskActions';
-import { showSubTaskPanel } from '../actions/subTaskActions';
+import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
 
 class TaskTable extends Component {
   state = {};
@@ -58,6 +58,8 @@ class TaskTable extends Component {
                 }}
                 onClick={() => {
                   this.props.onShowSubTaskPanel();
+                  // this.props.onSetCurrentTaskId(todo._id);
+                  this.props.onFetchSubTasks(this.props.currentListId, todo._id);
                 }}
               >
                 <div className="col-sm-1">
@@ -117,7 +119,8 @@ const mapDispatchprops = dispatch => {
     onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
     onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID)),
     onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID)),
-    onShowSubTaskPanel: () => dispatch(showSubTaskPanel())
+    onShowSubTaskPanel: () => dispatch(showSubTaskPanel()),
+    onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID))
   };
 };
 

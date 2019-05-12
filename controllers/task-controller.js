@@ -81,10 +81,6 @@ module.exports = {
         list.tasks.id(taskID).remove();
         return list.save();
       })
-      // .then(list => {
-      //   let task = list.tasks.find(task => task.id === taskID);
-      //   res.send(task);
-      // })
       .then(doc => res.send(doc))
       .catch(err => res.status(422).send(err));
   },
@@ -95,7 +91,6 @@ module.exports = {
 
     //TODO: reading back the entire list here, not sure if that's desireable
     //TODO: the instance method is not working as desired-the response still sends back previousState
-    //TODO:
     //TODO: there is no error being thrown here, when the wrong task id is being passed into the url
     List.findById(listID)
       .then(list => {

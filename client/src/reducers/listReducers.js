@@ -33,7 +33,6 @@ const ListReducer = (state = intialState, action) => {
       let newTask = state.tasks.concat(action.task);
       return { ...state, tasks: newTask };
     case 'DeleteTask':
-      console.log('delete task');
       return { ...state, tasks: action.data.tasks };
     case 'SetCurrentTaskID':
       // console.log(`taskID: ${currentTaskId}`);
