@@ -1,9 +1,11 @@
 import axios from 'axios';
+import config from '../config/dev-config';
+// let url = devConfig.apiUrl
 
 export const fetchData = () => {
   return dispatch => {
     axios
-      .get('http://localhost:5000/lists')
+      .get(`http://${config.apiUrl}/lists`)
       .then(res => {
         dispatch({ type: 'FetchData', data: res.data.lists });
       })
@@ -16,7 +18,7 @@ export const fetchData = () => {
 export const toggleList = id => {
   return dispatch => {
     axios
-      .put(`http://localhost:5000/lists/${id}/toggle_completion`)
+      .put(`http://${config.apiUrl}/lists/${id}/toggle_completion`)
       .then(res => {
         dispatch({ type: 'ToggleList', data: res.data });
       })
@@ -29,7 +31,7 @@ export const toggleList = id => {
 export const addList = title => {
   return dispatch => {
     axios
-      .post('http://localhost:5000/lists', { listTitle: title })
+      .post(`http://${config.apiUrl}/lists`, { listTitle: title })
       .then(res => {
         dispatch({ type: 'AddList', data: res.data });
       })
@@ -42,7 +44,7 @@ export const addList = title => {
 export const deleteList = id => {
   return dispatch => {
     axios
-      .delete(`http://localhost:5000/lists/${id}`)
+      .delete(`http://${config.apiUrl}/lists/${id}`)
       .then(res => {
         console.log(res.data);
         dispatch({ type: 'DeleteList', data: res.data });

@@ -1,9 +1,10 @@
 import axios from 'axios';
+import config from '../config/dev-config';
 
 export const fetchTasks = id => {
   return dispatch => {
     axios
-      .get('http://localhost:5000/tasks', {
+      .get(`http://${config.apiUrl}/tasks`, {
         params: {
           listID: id
         }
@@ -19,7 +20,7 @@ export const addTodo = (id, taskTitle) => {
   console.log('from action: ', id);
   return dispatch => {
     axios
-      .post('http://localhost:5000/tasks', { listID: id, taskTitle: taskTitle })
+      .post(`http://${config.apiUrl}/tasks`, { listID: id, taskTitle: taskTitle })
       .then(res => {
         console.log('from todo action: ', res.data);
         dispatch({ type: 'AddTodo', task: res.data });
@@ -34,7 +35,7 @@ export const deleteTask = (taskID, listID) => {
   console.log(`task id ${taskID}`);
   return dispatch => {
     axios
-      .delete(`http://localhost:5000/tasks/${taskID}`, { data: { listID: listID } })
+      .delete(`http://${config.apiUrl}/tasks/${taskID}`, { data: { listID: listID } })
       .then(res => {
         dispatch({ type: 'DeleteTask', data: res.data });
       })
@@ -47,7 +48,7 @@ export const deleteTask = (taskID, listID) => {
 export const toggleTask = (taskId, listID) => {
   return dispatch => {
     axios
-      .put(`http://localhost:5000/tasks/${taskId}/toggle_completion`, {
+      .put(`http://${config.apiUrl}/tasks/${taskId}/toggle_completion`, {
         listID: listID
       })
       .then(res => {

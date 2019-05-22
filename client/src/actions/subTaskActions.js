@@ -1,4 +1,5 @@
 import axios from 'axios';
+import config from '../config/dev-config';
 
 export const showSubTaskPanel = () => {
   return dispatch => {
@@ -9,7 +10,7 @@ export const showSubTaskPanel = () => {
 export const fetchSubTasks = (listID, taskID) => {
   return dispatch => {
     axios
-      .get('http://localhost:5000/subtasks', {
+      .get(`http://${config.apiUrl}/subtasks`, {
         params: {
           listID: listID,
           taskID: taskID
@@ -25,7 +26,7 @@ export const fetchSubTasks = (listID, taskID) => {
 export const addSubTask = (subTaskTitle, listID, taskID) => {
   return dispatch => {
     axios
-      .post('http://localhost:5000/subtasks', {
+      .post(`http://${config.apiUrl}/subtasks`, {
         subTaskTitle: subTaskTitle,
         listID: listID,
         taskID: taskID
@@ -46,7 +47,7 @@ export const deleteSubTask = (subTaskID, listID, taskID) => {
   console.log(`listID ${listID}`);
   return dispatch => {
     axios
-      .delete(`http://localhost:5000/subtasks/${subTaskID}`, {
+      .delete(`http://${config.apiUrl}/subtasks/${subTaskID}`, {
         data: { listID: listID, taskID: taskID }
       })
       .then(res => {
@@ -61,7 +62,7 @@ export const deleteSubTask = (subTaskID, listID, taskID) => {
 export const toggleSubTask = (subTaskID, listID, taskID) => {
   return dispatch => {
     axios
-      .put(`http://localhost:5000/subtasks/${subTaskID}/toggle_completion`, {
+      .put(`http://${config.apiUrl}/subtasks/${subTaskID}/toggle_completion`, {
         listID: listID,
         taskID: taskID
       })
