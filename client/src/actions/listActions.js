@@ -18,7 +18,6 @@ export const toggleList = id => {
     axios
       .put(`http://localhost:5000/lists/${id}/toggle_completion`)
       .then(res => {
-        console.log('ToggleList action');
         dispatch({ type: 'ToggleList', data: res.data });
       })
       .catch(res => {
@@ -32,8 +31,6 @@ export const addList = title => {
     axios
       .post('http://localhost:5000/lists', { listTitle: title })
       .then(res => {
-        console.log(res.data);
-
         dispatch({ type: 'AddList', data: res.data });
       })
       .catch(res => {

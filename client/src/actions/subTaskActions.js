@@ -57,3 +57,19 @@ export const deleteSubTask = (subTaskID, listID, taskID) => {
       });
   };
 };
+
+export const toggleSubTask = (subTaskID, listID, taskID) => {
+  return dispatch => {
+    axios
+      .put(`http://localhost:5000/subtasks/${subTaskID}/toggle_completion`, {
+        listID: listID,
+        taskID: taskID
+      })
+      .then(res => {
+        dispatch({ type: 'ToggleSubTask', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
