@@ -11,6 +11,6 @@ router.get('/subtasks', subTaskController.showSubTasks);
 
 router.put('/subtasks/:id/toggle_completion', subTaskController.toggleSubTasks);
 
-router.delete('subtasks/:id/', subTaskController.deleteSubTasks);
+router.delete('/subtasks/:id', subTaskController.deleteSubTasks);
 
 module.exports = router;

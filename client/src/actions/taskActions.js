@@ -1,18 +1,5 @@
 import axios from 'axios';
 
-// export const fetchData = () => {
-//   return dispatch => {
-//     axios
-//       .get('http://localhost:5000/lists')
-//       .then(res => {
-//         dispatch({ type: 'FetchData', data: res.data.lists });
-//       })
-//       .catch(res => {
-//         return Promise.reject(res);
-//       });
-//   };
-// };
-
 export const fetchTasks = id => {
   return dispatch => {
     axios
@@ -43,23 +30,39 @@ export const addTodo = (id, taskTitle) => {
   };
 };
 
-// export const deleteTodo = id => {
-//   return dispatch => {
-//     axios
-//       .delete(`http://localhost:5000/lists/${id}`)
-//       .then(res => {
-//         // console.log(`list tile ${title}`);
-//         dispatch({ type: 'DeleteList', data: res.data });
-//       })
-//       .catch(res => {
-//         return Promise.reject(res);
-//       });
-//   };
-// };
+export const deleteTask = (taskID, listID) => {
+  console.log(`task id ${taskID}`);
+  return dispatch => {
+    axios
+      .delete(`http://localhost:5000/tasks/${taskID}`, { data: { listID: listID } })
+      .then(res => {
+        dispatch({ type: 'DeleteTask', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
+
+export const toggleTask = (taskId, listID) => {
+  return dispatch => {
+    axios
+      .put(`http://localhost:5000/tasks/${taskId}/toggle_completion`, {
+        listID: listID
+      })
+      .then(res => {
+        console.log(listID);
+        console.log(res.data);
+        dispatch({ type: 'ToggleTask', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
 
 export const setCurrentTaskId = id => {
   return dispatch => {
-    console.log(id);
-    dispatch({ type: 'SetCurrentListId', currentListId: id });
+    dispatch({ type: 'SetCurrentTaskID', currentTaskId: id });
   };
 };

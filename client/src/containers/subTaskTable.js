@@ -1,44 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  fetchData,
-  deleteList,
-  addList,
-  setCurrentListId,
-  toggleList
-} from '../actions/listActions';
-import { fetchTasks } from '../actions/taskActions';
+import { addSubTask, deleteSubTask, toggleSubTask } from '../actions/subTaskActions';
 
-class ListNav extends Component {
+class SubTaskTable extends Component {
   state = {};
-
-  componentWillMount() {
-    this.props.onFetchData();
-    console.log('component did mount');
-  }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onAddList(this.state.listTitle);
+    this.props.onAddSubTask(
+      this.state.subTaskTitle,
+      this.props.currentListId,
+      this.props.currentTaskId
+    );
     e.target.reset();
   };
 
   handleBodyChange(e) {
     this.setState({
-      listTitle: e.target.value
+      subTaskTitle: e.target.value
     });
+    console.log(this.state.subTaskTitle);
   }
 
   render() {
     return (
       <div>
         <div className="sidebar-header">
-          <h3>Todo List App</h3>
+          <h3 style={{ wordWrap: 'break-word' }}>Task Title Here</h3>
         </div>
 
         <form name="list_nav" className="form-horizontal" onSubmit={this.handleSubmit}>
           <div className="input-group align-items-center">
-            <div className="col-sm-10" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
+            <div className="col-md-10" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
               <input
                 onChange={e => this.handleBodyChange(e)}
                 type="text"
@@ -53,34 +46,35 @@ class ListNav extends Component {
               style={{ paddingLeft: '0px', paddingRight: '0px' }}
             >
               <span className="input-group-btn">
-                <button className="btn  btn-sm btn-circle" style={{ borderRadius: '30px' }}>
+                <button className="btn btn-sm btn-circle primary">
                   <i className="fa fa-plus" />
                 </button>
               </span>
             </div>
           </div>
         </form>
-
-        <ul className="list-group" style={{ listStyleType: 'none', marginTop: '10px' }}>
-          {this.props.listArr.map(list => {
+        <ul className="list-group">
+          {this.props.subTasks.map(subTask => {
             return (
               <li
-                className="list-group-item d-flex align-items-center"
-                key={list._id}
+                className={'list-group-item d-flex align-items-center '}
+                key={subTask._id}
                 style={{
                   backgroundColor: 'transparent',
-                  border: 'none',
+                  // border: 'none',
                   display: 'block',
                   paddingLeft: '0px',
                   paddingRight: '0px',
                   paddingTop: '0px',
                   paddingBottom: '0px',
-                  marginBottom: '2px'
+                  marginBottom: '2px',
+                  marginTop: '5px',
+                  borderRadius: '5px'
                 }}
               >
                 <div
-                  key={list._id}
-                  value={list._id}
+                  key={subTask._id}
+                  value={subTask._id}
                   className="col-sm-10 d-flex align-items-center "
                   style={{
                     paddingLeft: '0px',
@@ -88,40 +82,45 @@ class ListNav extends Component {
                     paddingTop: '0px',
                     paddingBottom: '0px',
                     width: '100%',
-                    backgroundColor:
-                      list._id === this.props.currentListId ? 'rgb(203, 210, 239)' : '#7386D5',
+                    // backgroundColor:
+                    //   subTask._id === this.props.currentListId ? 'rgb(203, 210, 239)' : '#7386D5',
                     borderRadius: '5px',
-                    // list._id === this.props.currentListId ? '' : '#7386D5',
-                    textDecoration: list.completed.status === 'completed' ? 'line-through' : 'none'
-                  }}
-                  onClick={() => {
-                    this.props.onFetchTasks(list._id);
-                    this.props.onSetCurrentListId(list._id);
+                    // subTask._id === this.props.currentListId ? '' : '#7386D5',
+                    textDecoration:
+                      subTask.completed.status === 'completed' ? 'line-through' : 'none'
                   }}
                 >
                   <input
                     style={{ marginRight: '10px', marginLeft: '5px' }}
                     type="checkbox"
                     onChange={() => {
-                      this.props.onToggleList(list._id);
+                      this.props.onToggleSubTask(
+                        subTask._id,
+                        this.props.currentListId,
+                        this.props.currentTaskId
+                      );
                     }}
-                    aria-label="Checkbox for toggling list completion"
+                    aria-label="Checkbox for toggling subTask completion"
                   />
-                  {list.title}
+                  {subTask.title}
                 </div>
                 <div
                   className="col-sm-2 d-flex justify-content-center"
                   style={{ paddingLeft: '0px', paddingRight: '0px' }}
                 >
                   <button
-                    key={list._id}
+                    key={subTask._id}
                     className="btn btn-sm"
                     style={{ backgroundColor: 'transparent' }}
                     onClick={() => {
-                      this.props.onDeleteList(list._id);
+                      this.props.onDeleteSubTask(
+                        subTask._id,
+                        this.props.currentListId,
+                        this.props.currentTaskId
+                      );
                     }}
                   >
-                    <i className="fa fa-minus-circle" aria-hidden="true" />
+                    <i className="fa fa-minus-circle" />
                   </button>
                 </div>
               </li>
@@ -133,29 +132,31 @@ class ListNav extends Component {
   }
 }
 
-// maps state from store to props and passes the data to the component
 const mapStatetoProps = state => {
   return {
-    listArr: state.ListReducer.lists,
-    newList: state.ListReducer.list,
+    tasks: state.ListReducer.tasks,
+    subTasks: state.ListReducer.subTasks,
     currentListId: state.ListReducer.currentListId,
-    bgColor: state.ListReducer.bgColor,
-    error: state.error
+    currentTaskId: state.ListReducer.currentTaskId,
+    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel
   };
 };
 
 const mapDispatchprops = dispatch => {
   return {
-    onFetchData: () => dispatch(fetchData()),
-    onFetchTasks: id => dispatch(fetchTasks(id)),
-    onAddList: listTitle => dispatch(addList(listTitle)),
-    onDeleteList: id => dispatch(deleteList(id)),
-    onSetCurrentListId: id => dispatch(setCurrentListId(id)),
-    onToggleList: id => dispatch(toggleList(id))
+    onAddSubTask: (subTaskTitle, listID, taskID) =>
+      dispatch(addSubTask(subTaskTitle, listID, taskID)),
+    // onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID))
+    // onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
+    onToggleSubTask: (subTaskID, listID, taskID) =>
+      dispatch(toggleSubTask(subTaskID, listID, taskID)),
+    onDeleteSubTask: (subTaskID, taskID, listID) =>
+      dispatch(deleteSubTask(subTaskID, taskID, listID))
+    // onShowSubTaskPanel: () => dispatch(showSubTaskPanel())
   };
 };
 
 export default connect(
   mapStatetoProps,
   mapDispatchprops
-)(ListNav);
+)(SubTaskTable);

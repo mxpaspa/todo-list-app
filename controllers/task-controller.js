@@ -91,7 +91,6 @@ module.exports = {
 
     //TODO: reading back the entire list here, not sure if that's desireable
     //TODO: the instance method is not working as desired-the response still sends back previousState
-    //TODO:
     //TODO: there is no error being thrown here, when the wrong task id is being passed into the url
     List.findById(listID)
       .then(list => {
@@ -130,7 +129,8 @@ module.exports = {
         return list.save();
       })
       .then(list => {
-        res.send(list + ' List saved to database');
+        let task = list.tasks.filter(task => task.id === taskID);
+        res.send(task[0]);
       })
       .catch(err => {
         res.status(400).send(err);

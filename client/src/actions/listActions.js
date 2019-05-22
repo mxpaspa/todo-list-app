@@ -13,28 +13,24 @@ export const fetchData = () => {
   };
 };
 
-// export const fetchTasks = id => {
-//   return dispatch => {
-//     axios
-//       .get('http://localhost:5000/tasks', {
-//         params: {
-//           listID: id
-//         }
-//       })
-//       .then(res => dispatch({ type: 'FetchTasks', tasks: res.data }))
-//       .catch(res => {
-//         return Promise.reject(res);
-//       });
-//   };
-// };
+export const toggleList = id => {
+  return dispatch => {
+    axios
+      .put(`http://localhost:5000/lists/${id}/toggle_completion`)
+      .then(res => {
+        dispatch({ type: 'ToggleList', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
 
 export const addList = title => {
   return dispatch => {
     axios
       .post('http://localhost:5000/lists', { listTitle: title })
       .then(res => {
-        console.log(res.data);
-
         dispatch({ type: 'AddList', data: res.data });
       })
       .catch(res => {
@@ -59,7 +55,6 @@ export const deleteList = id => {
 
 export const setCurrentListId = id => {
   return dispatch => {
-    console.log(id);
     dispatch({ type: 'SetCurrentListId', currentListId: id });
   };
 };

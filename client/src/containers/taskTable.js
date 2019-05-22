@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTodo } from '../actions/taskActions';
-import { fetchTasks } from '../actions/taskActions';
-// import { deleteTodo, toggleTodo, setVisibilityFilter } from '../actions/actionCreator';
+import { setCurrentTaskId } from '../actions/taskActions';
+import { toggleTask } from '../actions/taskActions';
+import { deleteTask } from '../actions/taskActions';
+import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
 
 class TaskTable extends Component {
   state = {};
@@ -10,6 +12,7 @@ class TaskTable extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.onAddTodo(this.props.currentListId, this.state.taskTitle);
+    e.target.reset();
   };
 
   handleBodyChange(e) {
@@ -20,18 +23,18 @@ class TaskTable extends Component {
 
   render() {
     return (
-      <div id="container" className="col-md-8 col-md-offset-2 ">
+      <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '50px' }}>
         <form onSubmit={this.handleSubmit}>
           <div className="input-group">
             <input
-              className="form-control col-md-12"
+              className="form-control"
+              style={{ marginRight: '5px', borderRadius: '5px' }}
               onChange={e => this.handleBodyChange(e)}
               type="text"
-              className="form-control"
               id="addTask"
             />
             <span className="input-group-btn">
-              <button type="submit" id="list_nav_submit" className="btn-default btn">
+              <button type="submit" id="list_nav_submit" className="btn btn-primary btn-lg">
                 Submit
               </button>
             </span>
@@ -39,31 +42,61 @@ class TaskTable extends Component {
 
           <br />
         </form>
-        <div>
+        <ul className="list-group">
           {this.props.tasks.map(todo => {
             return (
-              <div className="list-group" key={todo._id} style={{ marginTop: '30px' }}>
-                <a
-                  href="#"
-                  key={todo._id}
-                  className="list-group-item"
-                  onClick={() => console.log('task id: ', todo._id)}
-                >
-                  {todo.title}
-                </a>
-                <div className="col-sm-2">
-                  <button
+              <li
+                className={
+                  'list-group-item d-flex align-items-center ' +
+                  (todo.completed.status === 'completed' ? 'disabled' : '')
+                }
+                key={todo._id}
+                style={{
+                  marginBottom: '20px',
+                  borderRadius: '5px'
+                  // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
+                }}
+                onClick={() => {
+                  this.props.onShowSubTaskPanel();
+                  // this.props.onSetCurrentTaskId(todo._id);
+                  this.props.onFetchSubTasks(this.props.currentListId, todo._id);
+                }}
+              >
+                <div className="col-sm-1">
+                  <input
+                    type="checkbox"
+                    aria-label="Checkbox for following text input"
                     key={todo._id}
-                    className="btn btn-secondary btn-sm"
-                    // onClick={() => {
-                    //   this.props.onDeleteList(list._id);
-                    // }}
+                    onClick={() => {
+                      this.props.onSetCurrentTaskId(todo._id);
+                      this.props.onToggleTask(todo._id, this.props.currentListId);
+                    }}
                   />
                 </div>
-              </div>
+                <div
+                  className="col-sm-10"
+                  onClick={() => {
+                    this.props.onSetCurrentTaskId(todo._id);
+                  }}
+                >
+                  <div style={{ float: 'left' }}>{todo.title}</div>
+                </div>
+                <div className="col-sm-1">
+                  <button
+                    key={todo._id}
+                    className="btn btn-sm"
+                    style={{ backgroundColor: 'transparent' }}
+                    onClick={() => {
+                      this.props.onDeleteTask(todo._id, this.props.currentListId);
+                    }}
+                  >
+                    <i className="fa fa-minus-circle" aria-hidden="true" />
+                  </button>
+                </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     );
   }
@@ -71,18 +104,23 @@ class TaskTable extends Component {
 
 const mapStatetoProps = state => {
   return {
-    tasks: state.TaskReducer.tasks,
-    newTask: state.TaskReducer.task,
+    tasks: state.ListReducer.tasks,
     error: state.error,
     data: state.data,
-    currentListId: state.ListReducer.currentListId
+    currentListId: state.ListReducer.currentListId,
+    currentTaskId: state.ListReducer.currentTaskId,
+    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel
   };
 };
 
 const mapDispatchprops = dispatch => {
   return {
     onAddTodo: (id, taskTitle) => dispatch(addTodo(id, taskTitle)),
-    onFetchTasks: id => dispatch(fetchTasks(id))
+    onSetCurrentTaskId: (id, listID) => dispatch(setCurrentTaskId(id, listID)),
+    onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID)),
+    onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID)),
+    onShowSubTaskPanel: () => dispatch(showSubTaskPanel()),
+    onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID))
   };
 };
 
