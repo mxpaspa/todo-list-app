@@ -23,7 +23,7 @@ class TaskTable extends Component {
 
   render() {
     return (
-      <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '50px' }}>
+      <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '45px' }}>
         <form onSubmit={this.handleSubmit}>
           <div className="input-group">
             <input
@@ -53,12 +53,13 @@ class TaskTable extends Component {
                 key={todo._id}
                 style={{
                   marginBottom: '20px',
-                  borderRadius: '5px'
+                  borderRadius: '5px',
+                  backgroundColor: todo._id === this.props.currentTaskId ? '#7386D5' : 'white'
                   // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
                 }}
                 onClick={() => {
                   this.props.onShowSubTaskPanel();
-                  // this.props.onSetCurrentTaskId(todo._id);
+                  this.props.onSetCurrentTaskId(todo._id);
                   this.props.onFetchSubTasks(this.props.currentListId, todo._id);
                 }}
               >
