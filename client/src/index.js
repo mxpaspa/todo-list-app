@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import './index.css';
 import thunk from 'redux-thunk';
-import ListReducer from './reducers/listReducers';
+// import ListReducer from './reducers/listReducers';
 import mainReducer from './reducers/mainReducer';
-import { persistStore, persistReducer } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
-import storage from 'redux-persist/lib/storage';
+// import { persistStore, persistReducer } from 'redux-persist';
+// import { PersistGate } from 'redux-persist/integration/react';
+// import storage from 'redux-persist/lib/storage';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import App from './App';
@@ -22,11 +22,11 @@ import App from './App';
 const store = createStore(
   mainReducer,
   compose(
-    applyMiddleware(thunk)
-    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 );
-const persistor = persistStore(store);
+// const persistor = persistStore(store);
 
 ReactDOM.render(
   <Provider store={store}>

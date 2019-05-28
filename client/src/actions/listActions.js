@@ -60,3 +60,23 @@ export const setCurrentListId = id => {
     dispatch({ type: 'SetCurrentListId', currentListId: id });
   };
 };
+
+export const showEditListModal = (id, show) => {
+  console.log(`from edit list action ${show}`);
+  return dispatch => {
+    dispatch({ type: 'ShowEditListModal', showModal: show || 'true' });
+  };
+};
+
+export const editListTitle = (id, title) => {
+  return dispatch => {
+    axios
+      .put(`http://${config.apiUrl}/lists/${id}/edit_title`, { newTitle: title })
+      .then(res => {
+        dispatch({ type: 'EditListTitle', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};

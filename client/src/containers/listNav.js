@@ -5,7 +5,8 @@ import {
   deleteList,
   addList,
   setCurrentListId,
-  toggleList
+  toggleList,
+  showEditListModal
 } from '../actions/listActions';
 import { fetchTasks } from '../actions/taskActions';
 
@@ -110,7 +111,23 @@ class ListNav extends Component {
                   {list.title}
                 </div>
                 <div
-                  className="col-sm-2 d-flex justify-content-center"
+                  className="col-sm-1 d-flex justify-content-center"
+                  style={{ paddingLeft: '0px', paddingRight: '0px' }}
+                >
+                  <button
+                    key={list._id}
+                    className="btn btn-sm"
+                    style={{ backgroundColor: 'transparent' }}
+                    onClick={() => {
+                      this.props.onSetCurrentListId(list._id);
+                      this.props.onShowEditListModal(list._id);
+                    }}
+                  >
+                    <i className="fa fa-edit" aria-hidden="true" />
+                  </button>
+                </div>
+                <div
+                  className="col-sm-1 d-flex justify-content-center"
                   style={{ paddingLeft: '0px', paddingRight: '0px' }}
                 >
                   <button
@@ -151,6 +168,7 @@ const mapDispatchprops = dispatch => {
     onAddList: listTitle => dispatch(addList(listTitle)),
     onDeleteList: id => dispatch(deleteList(id)),
     onSetCurrentListId: id => dispatch(setCurrentListId(id)),
+    onShowEditListModal: id => dispatch(showEditListModal(id)),
     onToggleList: id => dispatch(toggleList(id))
   };
 };

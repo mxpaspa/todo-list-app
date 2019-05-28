@@ -94,6 +94,21 @@ module.exports = {
       .catch(err => res.status(204).send(err));
   },
 
+  editTitle: function(req, res) {
+    let id = req.params.id;
+    let newTitle = req.body.newTitle;
+
+    List.findById(id)
+      .then(list => {
+        list.title = newTitle;
+        return list.save();
+      })
+      .then(list => {
+        res.send(list);
+      })
+      .catch(err => res.status(204).send(err));
+  },
+
   //TODO: is there a mongoose query that will detel
   deleteList: function(req, res) {
     let id = req.params.id;

@@ -4,7 +4,7 @@ const intialState = {
   subTasks: [],
   currentListId: '',
   currentTaskId: '',
-  bgColor: 'black'
+  showModal: 'false'
 };
 
 const ListReducer = (state = intialState, action) => {
@@ -26,10 +26,20 @@ const ListReducer = (state = intialState, action) => {
     case 'AddList':
       let newItem = state.lists.concat(action.data);
       return { ...state, lists: newItem };
+    case 'EditListTitle':
+      return {
+        ...state,
+        lists: state.lists.map(list =>
+          list._id === action.data._id ? { ...list, title: action.data.title } : list
+        )
+      };
     case 'DeleteList':
       return { ...state, lists: state.lists.filter(list => action.data._id !== list._id) };
     case 'SetCurrentListId':
-      return { ...state, currentListId: action.currentListId, bgColor: state.bgColor };
+      return { ...state, currentListId: action.currentListId };
+    case 'ShowEditListModal':
+      console.log(`from edit list reducer ${action.showModal}`);
+      return { ...state, showModal: action.showModal };
     case 'FetchTasks':
       return { ...state, tasks: action.tasks };
     case 'AddTodo':
@@ -38,17 +48,13 @@ const ListReducer = (state = intialState, action) => {
     case 'DeleteTask':
       return { ...state, tasks: action.data.tasks };
     case 'SetCurrentTaskID':
-      // console.log(`taskID: ${currentTaskId}`);
       return { ...state, currentTaskId: action.currentTaskId };
     case 'ToggleTask':
-      console.log('toggle task reducer');
-      // let toggleList = state.lists.find(list => list._id === action.data._id);
       return {
         ...state,
         tasks: state.tasks.map(task =>
           task._id === action.data._id ? { ...task, completed: action.data.completed } : task
         )
-        // tasks: action.data.tasks
       };
     case 'DeleteSubTask':
       return { ...state, subTasks: action.data };

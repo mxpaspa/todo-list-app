@@ -11,6 +11,8 @@ router.get('/lists', listController.showLists);
 
 router.put('/lists/:id/toggle_completion', listController.toggleList);
 
+router.put('/lists/:id/edit_title', listController.editTitle);
+
 router.delete('/lists/:id', listController.deleteList);
 
 module.exports = router;
