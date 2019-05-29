@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { showEditListModal, editListTitle } from '../actions/listActions';
+import { showEditModal, editListTitle } from '../actions/listActions';
+import { editTaskTitle } from '../actions/taskActions';
 import { connect } from 'react-redux';
 
 class Modal extends Component {
@@ -8,7 +9,9 @@ class Modal extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.onEditListTitle(this.props.currentListId, this.state.newTitle);
+
     e.target.reset();
   };
 
@@ -27,9 +30,7 @@ class Modal extends Component {
           bottom: '0',
           left: '0',
           right: '0',
-          display: 'grid',
-          justifyContent: 'center',
-          alignItems: 'center',
+
           backgroundColor: 'rgba(0,0,0,0.3)'
         }}
       >
@@ -41,16 +42,12 @@ class Modal extends Component {
           className="form-horizontal"
           onSubmit={this.handleSubmit}
           style={{
+            margin: 'auto',
             padding: 20,
             background: '#fff',
             borderRadius: '2px',
-            display: 'inline-block',
-            minHeight: '300px',
-            margin: '1rem',
-            position: 'relative',
-            minWidth: '300px',
-            boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-            justifySelf: 'center'
+            maxWidth: '300px',
+            boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
           }}
         >
           <div className="input-group align-items-center">
@@ -75,16 +72,19 @@ class Modal extends Component {
               </span>
             </div>
           </div>
+          <div className="modal-body">...</div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-primary"
+              style={{ borderRadius: '30px' }}
+              onClick={() => {
+                this.props.onShowEditModal(null, 'false');
+              }}
+            >
+              Close
+            </button>
+          </div>
         </form>
-        <button
-          className="btn btn-primary"
-          style={{ borderRadius: '30px' }}
-          onClick={() => {
-            this.props.onShowEditListModal(null, 'false');
-          }}
-        >
-          Close
-        </button>
       </div>,
       document.querySelector('#modal')
     );
@@ -93,14 +93,16 @@ class Modal extends Component {
 
 const mapStatetoProps = state => {
   return {
-    currentListId: state.ListReducer.currentListId
+    currentListId: state.ListReducer.currentListId,
+    currentTaskId: state.ListReducer.currentTaskId
   };
 };
 
 const mapDispatchprops = dispatch => {
   return {
-    onShowEditListModal: (id, show) => dispatch(showEditListModal(id, show)),
-    onEditListTitle: (id, title) => dispatch(editListTitle(id, title))
+    onShowEditModal: (id, show) => dispatch(showEditModal(id, show)),
+    onEditListTitle: (id, title) => dispatch(editListTitle(id, title)),
+    onEditTaskTitle: (id, listID, title) => dispatch(editTaskTitle(id, listID, title))
   };
 };
 

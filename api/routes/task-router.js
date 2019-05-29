@@ -11,6 +11,8 @@ router.get('/tasks', tasksController.getTasks);
 
 router.put('/tasks/:id/toggle_completion', tasksController.toggleTask);
 
+router.put('/tasks/:id/edit_title', tasksController.editTaskTitle);
+
 router.delete('/tasks/:id', tasksController.deleteTask);
 
 module.exports = router;

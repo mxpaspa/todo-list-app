@@ -67,3 +67,23 @@ export const setCurrentTaskId = id => {
     dispatch({ type: 'SetCurrentTaskID', currentTaskId: id });
   };
 };
+
+export const showEditTaskModal = (id, show) => {
+  console.log(`from showEditTaskModal ${show}`);
+  return dispatch => {
+    dispatch({ type: 'ShowEditTaskModal', showEditTaskModal: show || 'true' });
+  };
+};
+
+export const editTaskTitle = (id, listID, title) => {
+  return dispatch => {
+    axios
+      .put(`http://${config.apiUrl}/tasks/${id}/edit_title`, { newTitle: title, listID: listID })
+      .then(res => {
+        dispatch({ type: 'EditTaskTitle', data: res.data });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};

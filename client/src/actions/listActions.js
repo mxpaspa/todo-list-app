@@ -61,10 +61,10 @@ export const setCurrentListId = id => {
   };
 };
 
-export const showEditListModal = (id, show) => {
+export const showEditModal = (id, show) => {
   console.log(`from edit list action ${show}`);
   return dispatch => {
-    dispatch({ type: 'ShowEditListModal', showModal: show || 'true' });
+    dispatch({ type: 'ShowEditModal', showModal: show || 'true' });
   };
 };
 

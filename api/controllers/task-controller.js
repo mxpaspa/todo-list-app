@@ -85,6 +85,24 @@ module.exports = {
       .catch(err => res.status(422).send(err));
   },
 
+  editTaskTitle: function(req, res) {
+    let listID = req.body.listID;
+    let taskID = req.params.id;
+    let newTitle = req.body.newTitle;
+
+    List.findById(listID)
+      .then(list => {
+        let task = list.tasks.id(taskID);
+        task.title = newTitle;
+        return list.save();
+      })
+      .then(list => {
+        let task = list.tasks.filter(task => task.id === taskID);
+        res.send(task[0]);
+      })
+      .catch(err => res.status(422).send(err));
+  },
+
   toggleTask: function(req, res) {
     let listID = req.body.listID;
     let taskID = req.params.id;
@@ -125,7 +143,6 @@ module.exports = {
           });
         }
 
-        // list.toJSON();
         return list.save();
       })
       .then(list => {

@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from '../actions/taskActions';
-import { setCurrentTaskId } from '../actions/taskActions';
-import { toggleTask } from '../actions/taskActions';
-import { deleteTask } from '../actions/taskActions';
+
+import {
+  toggleTask,
+  setCurrentTaskId,
+  deleteTask,
+  addTodo,
+  showEditTaskModal
+} from '../actions/taskActions';
+import { showEditModal } from '../actions/listActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
 
 class TaskTable extends Component {
@@ -82,6 +87,22 @@ class TaskTable extends Component {
                 >
                   <div style={{ float: 'left' }}>{todo.title}</div>
                 </div>
+                <div
+                  className="col-sm-1 d-flex justify-content-center"
+                  style={{ paddingLeft: '0px', paddingRight: '0px' }}
+                >
+                  <button
+                    key={todo._id}
+                    className="btn btn-sm"
+                    style={{ backgroundColor: 'transparent' }}
+                    onClick={() => {
+                      this.props.onSetCurrentTaskId(todo._id);
+                      this.props.onShowEditTaskModal(null, 'true');
+                    }}
+                  >
+                    <i className="fa fa-edit" aria-hidden="true" />
+                  </button>
+                </div>
                 <div className="col-sm-1">
                   <button
                     key={todo._id}
@@ -121,6 +142,7 @@ const mapDispatchprops = dispatch => {
     onToggleTask: (taskID, listID) => dispatch(toggleTask(taskID, listID)),
     onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID)),
     onShowSubTaskPanel: () => dispatch(showSubTaskPanel()),
+    onShowEditTaskModal: (id, show) => dispatch(showEditTaskModal(id, show)),
     onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID))
   };
 };
