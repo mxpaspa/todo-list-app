@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ListNav from './containers/listNav';
 import TaskTable from './containers/taskTable';
 import SubTaskTable from './containers/subTaskTable';
-import Modal from './containers/editListModal';
+import ListModal from './containers/editListModal';
 import TaskModal from './containers/editTaskModal';
 class App extends Component {
   render() {
@@ -31,7 +31,7 @@ class App extends Component {
                 <SubTaskTable />
               </div>
             )}
-            {this.props.showEditListModal === 'true' && <Modal />}
+            {this.props.showEditListModal === 'true' && <ListModal />}
             {this.props.showEditTaskModal === 'true' && <TaskModal />}
           </div>
         </div>

@@ -4,7 +4,7 @@ const intialState = {
   subTasks: [],
   currentListId: '',
   currentTaskId: '',
-  showModal: 'false',
+  showEditListModal: 'false',
   showEditTaskModal: 'false'
 };
 
@@ -38,9 +38,9 @@ const ListReducer = (state = intialState, action) => {
       return { ...state, lists: state.lists.filter(list => action.data._id !== list._id) };
     case 'SetCurrentListId':
       return { ...state, currentListId: action.currentListId };
-    case 'ShowEditModal':
-      console.log(`from edit list reducer ${action.showModal}`);
-      return { ...state, showModal: action.showModal };
+    case 'ShowEditListModal':
+      console.log(`from edit list reducer ${action.showEditListModal}`);
+      return { ...state, showModal: action.showEditListModal };
     case 'FetchTasks':
       return { ...state, tasks: action.tasks };
     case 'AddTodo':

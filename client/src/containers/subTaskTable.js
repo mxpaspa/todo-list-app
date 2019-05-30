@@ -26,7 +26,7 @@ class SubTaskTable extends Component {
     return (
       <div>
         <div className="sidebar-header">
-          <h3 style={{ wordWrap: 'break-word' }}>Task Title Here</h3>
+          <h3 style={{ wordWrap: 'break-word' }}>SubTask Title Here</h3>
         </div>
 
         <form name="list_nav" className="form-horizontal" onSubmit={this.handleSubmit}>

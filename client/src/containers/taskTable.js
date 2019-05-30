@@ -8,7 +8,6 @@ import {
   addTodo,
   showEditTaskModal
 } from '../actions/taskActions';
-import { showEditModal } from '../actions/listActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
 
 class TaskTable extends Component {
@@ -49,74 +48,149 @@ class TaskTable extends Component {
         </form>
         <ul className="list-group">
           {this.props.tasks.map(todo => {
-            return (
-              <li
-                className={
-                  'list-group-item d-flex align-items-center ' +
-                  (todo.completed.status === 'completed' ? 'disabled' : '')
-                }
-                key={todo._id}
-                style={{
-                  marginBottom: '20px',
-                  borderRadius: '5px',
-                  backgroundColor: todo._id === this.props.currentTaskId ? '#7386D5' : 'white'
-                  // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
-                }}
-                onClick={() => {
-                  this.props.onShowSubTaskPanel();
-                  this.props.onSetCurrentTaskId(todo._id);
-                  this.props.onFetchSubTasks(this.props.currentListId, todo._id);
-                }}
-              >
-                <div className="col-sm-1">
-                  <input
-                    type="checkbox"
-                    aria-label="Checkbox for following text input"
-                    key={todo._id}
-                    onClick={() => {
-                      this.props.onSetCurrentTaskId(todo._id);
-                      this.props.onToggleTask(todo._id, this.props.currentListId);
-                    }}
-                  />
-                </div>
-                <div
-                  className="col-sm-10"
+            if (todo.completed.status === 'pending') {
+              return (
+                <li
+                  className={
+                    'list-group-item d-flex align-items-center '
+                    // (todo.completed.status === 'completed' ? 'disabled' : '')
+                    // 'list-group-item d-flex align-items-center ' +
+                    // (todo.completed.status === 'completed' ? 'disabled' : '')
+                  }
+                  key={todo._id}
+                  style={{
+                    marginBottom: '20px',
+                    borderRadius: '5px',
+                    backgroundColor: todo._id === this.props.currentTaskId ? '#7386D5' : 'white'
+                    // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
+                  }}
                   onClick={() => {
+                    this.props.onShowSubTaskPanel();
                     this.props.onSetCurrentTaskId(todo._id);
+                    this.props.onFetchSubTasks(this.props.currentListId, todo._id);
                   }}
                 >
-                  <div style={{ float: 'left' }}>{todo.title}</div>
-                </div>
-                <div
-                  className="col-sm-1 d-flex justify-content-center"
-                  style={{ paddingLeft: '0px', paddingRight: '0px' }}
-                >
-                  <button
-                    key={todo._id}
-                    className="btn btn-sm"
-                    style={{ backgroundColor: 'transparent' }}
+                  <div className="col-sm-1">
+                    <input
+                      type="checkbox"
+                      aria-label="Checkbox for following text input"
+                      key={todo._id}
+                      onClick={() => {
+                        this.props.onSetCurrentTaskId(todo._id);
+                        this.props.onToggleTask(todo._id, this.props.currentListId);
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="col-sm-9"
                     onClick={() => {
                       this.props.onSetCurrentTaskId(todo._id);
-                      this.props.onShowEditTaskModal(null, 'true');
                     }}
                   >
-                    <i className="fa fa-edit" aria-hidden="true" />
-                  </button>
-                </div>
-                <div className="col-sm-1">
-                  <button
-                    key={todo._id}
-                    className="btn btn-sm"
-                    style={{ backgroundColor: 'transparent' }}
+                    <div style={{ float: 'left' }}>{todo.title}</div>
+                  </div>
+                  <div
+                    className="col-sm-1 d-flex justify-content-center"
+                    style={{ paddingLeft: '0px', paddingRight: '0px' }}
+                  >
+                    <button
+                      key={todo._id}
+                      className="btn btn-sm"
+                      style={{ backgroundColor: 'transparent' }}
+                      onClick={() => {
+                        this.props.onSetCurrentTaskId(todo._id);
+                        this.props.onShowEditTaskModal(null, 'true');
+                      }}
+                    >
+                      <i className="fa fa-edit" aria-hidden="true" />
+                    </button>
+                  </div>
+                  <div className="col-sm-1">
+                    <button
+                      key={todo._id}
+                      className="btn btn-sm"
+                      style={{ backgroundColor: 'transparent' }}
+                      onClick={() => {
+                        this.props.onDeleteTask(todo._id, this.props.currentListId);
+                      }}
+                    >
+                      <i className="fa fa-minus-circle" aria-hidden="true" />
+                    </button>
+                  </div>
+                </li>
+              );
+            }
+          })}
+        </ul>
+        <ul className="list-group">
+          {this.props.tasks.map(todo => {
+            if (todo.completed.status === 'completed') {
+              return (
+                <li
+                  className={'list-group-item d-flex align-items-center disabled '}
+                  key={todo._id}
+                  style={{
+                    marginBottom: '20px',
+                    borderRadius: '5px',
+                    backgroundColor: todo._id === this.props.currentTaskId ? '#7386D5' : 'white'
+                    // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
+                  }}
+                  onClick={() => {
+                    this.props.onShowSubTaskPanel();
+                    this.props.onSetCurrentTaskId(todo._id);
+                    this.props.onFetchSubTasks(this.props.currentListId, todo._id);
+                  }}
+                >
+                  <div className="col-sm-1">
+                    <input
+                      type="checkbox"
+                      aria-label="Checkbox for following text input"
+                      key={todo._id}
+                      onClick={() => {
+                        this.props.onSetCurrentTaskId(todo._id);
+                        this.props.onToggleTask(todo._id, this.props.currentListId);
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="col-sm-9"
                     onClick={() => {
-                      this.props.onDeleteTask(todo._id, this.props.currentListId);
+                      this.props.onSetCurrentTaskId(todo._id);
                     }}
                   >
-                    <i className="fa fa-minus-circle" aria-hidden="true" />
-                  </button>
-                </div>
-              </li>
-            );
+                    <div style={{ float: 'left' }}>{todo.title}</div>
+                  </div>
+                  <div
+                    className="col-sm-1 d-flex justify-content-center"
+                    style={{ paddingLeft: '0px', paddingRight: '0px' }}
+                  >
+                    <button
+                      key={todo._id}
+                      className="btn btn-sm"
+                      style={{ backgroundColor: 'transparent' }}
+                      onClick={() => {
+                        this.props.onSetCurrentTaskId(todo._id);
+                        this.props.onShowEditTaskModal(null, 'true');
+                      }}
+                    >
+                      <i className="fa fa-edit" aria-hidden="true" />
+                    </button>
+                  </div>
+                  <div className="col-sm-1">
+                    <button
+                      key={todo._id}
+                      className="btn btn-sm"
+                      style={{ backgroundColor: 'transparent' }}
+                      onClick={() => {
+                        this.props.onDeleteTask(todo._id, this.props.currentListId);
+                      }}
+                    >
+                      <i className="fa fa-minus-circle" aria-hidden="true" />
+                    </button>
+                  </div>
+                </li>
+              );
+            }
           })}
         </ul>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { showEditModal, editListTitle } from '../actions/listActions';
+import { showEditListModal, editListTitle } from '../actions/listActions';
 import { editTaskTitle } from '../actions/taskActions';
 import { connect } from 'react-redux';
 
@@ -100,7 +100,7 @@ const mapStatetoProps = state => {
 
 const mapDispatchprops = dispatch => {
   return {
-    onShowEditModal: (id, show) => dispatch(showEditModal(id, show)),
+    onShowEditModal: (id, show) => dispatch(showEditListModal(id, show)),
     onEditListTitle: (id, title) => dispatch(editListTitle(id, title)),
     onEditTaskTitle: (id, listID, title) => dispatch(editTaskTitle(id, listID, title))
   };

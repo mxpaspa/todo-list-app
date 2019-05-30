@@ -6,7 +6,7 @@ import {
   addList,
   setCurrentListId,
   toggleList,
-  showEditModal
+  showEditListModal
 } from '../actions/listActions';
 import { fetchTasks } from '../actions/taskActions';
 
@@ -168,7 +168,7 @@ const mapDispatchprops = dispatch => {
     onAddList: listTitle => dispatch(addList(listTitle)),
     onDeleteList: id => dispatch(deleteList(id)),
     onSetCurrentListId: id => dispatch(setCurrentListId(id)),
-    onShowEditModal: id => dispatch(showEditModal(id)),
+    onShowEditModal: id => dispatch(showEditListModal(id)),
     onToggleList: id => dispatch(toggleList(id))
   };
 };
