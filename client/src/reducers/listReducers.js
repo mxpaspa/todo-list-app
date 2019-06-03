@@ -5,7 +5,8 @@ const intialState = {
   currentListId: '',
   currentTaskId: '',
   showEditListModal: 'false',
-  showEditTaskModal: 'false'
+  showEditTaskModal: 'false',
+  showCompletedTasksArea: null
 };
 
 const ListReducer = (state = intialState, action) => {
@@ -60,6 +61,9 @@ const ListReducer = (state = intialState, action) => {
     case 'ShowEditTaskModal':
       console.log(`from edit task modal reducer ${action.showEditTaskModal}`);
       return { ...state, showEditTaskModal: action.showEditTaskModal };
+    case 'ShowCompletedTasksArea':
+      console.log(`from show completed tasks reducer ${action.showCompletedTasksArea}`);
+      return { ...state, showCompletedTasksArea: action.showCompletedTasksArea };
     case 'EditTaskTitle':
       return {
         ...state,

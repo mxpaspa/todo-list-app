@@ -75,6 +75,13 @@ export const showEditTaskModal = (id, show) => {
   };
 };
 
+export const showCompletedTasksArea = show => {
+  console.log(`from showCompletedTasksArea ${show}`);
+  return dispatch => {
+    dispatch({ type: 'ShowCompletedTasksArea', showCompletedTasksArea: show });
+  };
+};
+
 export const editTaskTitle = (id, listID, title) => {
   return dispatch => {
     axios

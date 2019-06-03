@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import CompletedArea from './completedArea';
+
 import {
   toggleTask,
   setCurrentTaskId,
   deleteTask,
   addTodo,
-  showEditTaskModal,
-  showCompletedTasksArea
+  showEditTaskModal
 } from '../actions/taskActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
 
@@ -29,35 +28,18 @@ class TaskTable extends Component {
   render() {
     return (
       <div className="col-lg-10" style={{ display: 'inline-block', paddingTop: '45px' }}>
-        <form onSubmit={this.handleSubmit}>
-          <div className="input-group">
-            <input
-              className="form-control"
-              style={{ marginRight: '5px', borderRadius: '5px' }}
-              onChange={e => this.handleBodyChange(e)}
-              type="text"
-              id="addTask"
-            />
-            <span className="input-group-btn">
-              <button type="submit" id="list_nav_submit" className="btn btn-primary btn-lg">
-                Submit
-              </button>
-            </span>
-          </div>
-
-          <br />
-        </form>
         <ul className="list-group">
           {this.props.tasks.map(todo => {
-            if (todo.completed.status === 'pending') {
+            if (todo.completed.status === 'completed') {
               return (
                 <li
-                  className={'list-group-item d-flex align-items-center '}
+                  className={'list-group-item d-flex align-items-center disabled '}
                   key={todo._id}
                   style={{
                     marginBottom: '20px',
                     borderRadius: '5px',
                     backgroundColor: todo._id === this.props.currentTaskId ? '#7386D5' : 'white'
+                    // textDecoration: todo.completed.status === 'completed' ? 'line-through' : 'none'
                   }}
                   onClick={() => {
                     this.props.onShowSubTaskPanel();
@@ -117,30 +99,6 @@ class TaskTable extends Component {
             }
           })}
         </ul>
-        {this.props.showCompletedTasksArea === 'true' && <CompletedArea />}
-        <button
-          type="button"
-          class="btn btn-primary"
-          onClick={() => {
-            if (
-              this.props.showCompletedTasksArea === 'false' ||
-              this.props.showCompletedTasksArea === null
-            ) {
-              let show = 'true';
-              this.props.onShowCompletedTasksArea(show);
-            }
-            if (this.props.showCompletedTasksArea === 'true') {
-              let show = 'false';
-              this.props.onShowCompletedTasksArea(show);
-            }
-
-            // let show = this.showCompletedTasksArea === null || 'false' ? 'true' : 'false';
-            // this.props.onShowCompletedTasksArea(show);
-            // console.log(`onclick ${this.props.showCompletedTasksArea}`);
-          }}
-        >
-          Completed <span class="badge badge-light">4</span>
-        </button>
       </div>
     );
   }
@@ -153,8 +111,7 @@ const mapStatetoProps = state => {
     data: state.data,
     currentListId: state.ListReducer.currentListId,
     currentTaskId: state.ListReducer.currentTaskId,
-    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel,
-    showCompletedTasksArea: state.ListReducer.showCompletedTasksArea
+    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel
   };
 };
 
@@ -166,7 +123,6 @@ const mapDispatchprops = dispatch => {
     onDeleteTask: (taskID, listID) => dispatch(deleteTask(taskID, listID)),
     onShowSubTaskPanel: () => dispatch(showSubTaskPanel()),
     onShowEditTaskModal: (id, show) => dispatch(showEditTaskModal(id, show)),
-    onShowCompletedTasksArea: show => dispatch(showCompletedTasksArea(show)),
     onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID))
   };
 };
