@@ -15,6 +15,23 @@ export const fetchData = () => {
   };
 };
 
+export const fetchCompletedTaskCount = listID => {
+  return dispatch => {
+    axios
+      .get(`http://${config.apiUrl}/lists/${listID}`)
+      .then(res => {
+        console.log(`fetch completed tasks area ${res.data.incomplete_count.tasks}`);
+        dispatch({
+          type: 'FetchIncompleteCount',
+          incompleteCount: res.data.incomplete_count.tasks
+        });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
+
 export const toggleList = id => {
   return dispatch => {
     axios
@@ -46,7 +63,6 @@ export const deleteList = id => {
     axios
       .delete(`http://${config.apiUrl}/lists/${id}`)
       .then(res => {
-        console.log(res.data);
         dispatch({ type: 'DeleteList', data: res.data });
       })
       .catch(res => {
@@ -62,7 +78,6 @@ export const setCurrentListId = id => {
 };
 
 export const showEditListModal = (id, show) => {
-  console.log(`from edit list action ${show}`);
   return dispatch => {
     dispatch({ type: 'ShowEditListModal', showEditListModal: show || 'true' });
   };

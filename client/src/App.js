@@ -14,7 +14,7 @@ class App extends Component {
         <div className="container-fluid">
           <div className="row" style={{ height: '100%' }}>
             <div
-              className="col-3"
+              className="col-3 col-xs-offset-1 sidebar-outer sticky-top"
               style={{
                 height: '100vh',
                 backgroundColor: 'rgb(115, 134, 213)'
@@ -22,12 +22,14 @@ class App extends Component {
             >
               <ListNav />
             </div>
-            <div className={this.props.showSubTaskPanel ? 'col-7' : 'col-9'}>
+            <div
+              className={this.props.showSubTaskPanel ? 'col-7' : 'col-9'}
+              // style={{ marginLeft: '400px' }}
+            >
               <div style={{ textAlign: 'center' }}>
                 <TaskTable />
               </div>
             </div>
-
             {this.props.showSubTaskPanel && (
               <div className="col-2">
                 <SubTaskTable />

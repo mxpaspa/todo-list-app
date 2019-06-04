@@ -10,6 +10,7 @@ import {
   showCompletedTasksArea
 } from '../actions/taskActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
+import { fetchCompletedTaskCount } from '../actions/listActions';
 
 class TaskTable extends Component {
   state = {};
@@ -39,7 +40,14 @@ class TaskTable extends Component {
               id="addTask"
             />
             <span className="input-group-btn">
-              <button type="submit" id="list_nav_submit" className="btn btn-primary btn-lg">
+              <button
+                type="submit"
+                id="list_nav_submit"
+                className="btn btn-primary btn-lg"
+                onClick={() => {
+                  this.props.onFetchCompletedTaskCount(this.props.currentListId);
+                }}
+              >
                 Submit
               </button>
             </span>
@@ -73,6 +81,7 @@ class TaskTable extends Component {
                       onClick={() => {
                         this.props.onSetCurrentTaskId(todo._id);
                         this.props.onToggleTask(todo._id, this.props.currentListId);
+                        this.props.onFetchCompletedTaskCount(this.props.currentListId);
                       }}
                     />
                   </div>
@@ -117,30 +126,29 @@ class TaskTable extends Component {
             }
           })}
         </ul>
+        <div style={{ marginBottom: ' 50px ', position: 'relative' }}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            style={{ left: '0', position: 'absolute' }}
+            onClick={() => {
+              if (
+                this.props.showCompletedTasksArea === 'false' ||
+                this.props.showCompletedTasksArea === null
+              ) {
+                let show = 'true';
+                this.props.onShowCompletedTasksArea(show);
+              }
+              if (this.props.showCompletedTasksArea === 'true') {
+                let show = 'false';
+                this.props.onShowCompletedTasksArea(show);
+              }
+            }}
+          >
+            Completed <span className="badge badge-light">{this.props.completedTaskCount}</span>
+          </button>
+        </div>
         {this.props.showCompletedTasksArea === 'true' && <CompletedArea />}
-        <button
-          type="button"
-          class="btn btn-primary"
-          onClick={() => {
-            if (
-              this.props.showCompletedTasksArea === 'false' ||
-              this.props.showCompletedTasksArea === null
-            ) {
-              let show = 'true';
-              this.props.onShowCompletedTasksArea(show);
-            }
-            if (this.props.showCompletedTasksArea === 'true') {
-              let show = 'false';
-              this.props.onShowCompletedTasksArea(show);
-            }
-
-            // let show = this.showCompletedTasksArea === null || 'false' ? 'true' : 'false';
-            // this.props.onShowCompletedTasksArea(show);
-            // console.log(`onclick ${this.props.showCompletedTasksArea}`);
-          }}
-        >
-          Completed <span class="badge badge-light">4</span>
-        </button>
       </div>
     );
   }
@@ -154,7 +162,8 @@ const mapStatetoProps = state => {
     currentListId: state.ListReducer.currentListId,
     currentTaskId: state.ListReducer.currentTaskId,
     showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel,
-    showCompletedTasksArea: state.ListReducer.showCompletedTasksArea
+    showCompletedTasksArea: state.ListReducer.showCompletedTasksArea,
+    completedTaskCount: state.ListReducer.incompleteCount
   };
 };
 
@@ -167,7 +176,8 @@ const mapDispatchprops = dispatch => {
     onShowSubTaskPanel: () => dispatch(showSubTaskPanel()),
     onShowEditTaskModal: (id, show) => dispatch(showEditTaskModal(id, show)),
     onShowCompletedTasksArea: show => dispatch(showCompletedTasksArea(show)),
-    onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID))
+    onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID)),
+    onFetchCompletedTaskCount: listID => dispatch(fetchCompletedTaskCount(listID))
   };
 };
 

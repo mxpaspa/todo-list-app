@@ -30,14 +30,6 @@ module.exports = {
       previousTaskState: ''
     };
 
-    // List.findById(listID)
-    //   .then(list => {
-    //     list.tasks.push(newTask);
-    //     list.incomplete_count.tasks += 1;
-    //     return list.save();
-    //   })
-    //   .then(task => res.send(task))
-    //   .catch(err => res.status(404).send(err));
     let query = { _id: listID };
     let update = { $push: { tasks: newTask } };
     let options = { new: true };
@@ -45,11 +37,8 @@ module.exports = {
       if (err) {
         throw err;
       }
-      // let tasks = doc.tasks[tasks.length - 1];
       res.send(doc.tasks[doc.tasks.length - 1]);
     });
-    // .then(task => res.send(task))
-    // .catch(err => res.status(404).send(err));
   },
 
   getTasks: function(req, res) {
