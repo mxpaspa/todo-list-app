@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   fetchData,
+  fetchIncompleteTaskCount,
   deleteList,
   addList,
   setCurrentListId,
@@ -15,6 +16,7 @@ class ListNav extends Component {
 
   componentWillMount() {
     this.props.onFetchData();
+
     console.log('component did mount');
   }
 
@@ -98,6 +100,7 @@ class ListNav extends Component {
                   onClick={() => {
                     this.props.onFetchTasks(list._id);
                     this.props.onSetCurrentListId(list._id);
+                    // this.props.onFetchIncompleteTaskCount(list._id);
                   }}
                 >
                   <input
@@ -109,6 +112,19 @@ class ListNav extends Component {
                     aria-label="Checkbox for toggling list completion"
                   />
                   {list.title}
+                  <div
+                    style={{
+                      marginLeft: '180px',
+                      // width: '15px',
+                      fontSize: '10px',
+                      backgroundColor: 'rgba(159, 90, 253, 1)',
+                      borderRadius: '2px',
+                      height: '15px'
+                    }}
+                    className="col-sm-1 d-flex justify-content-center"
+                  >
+                    {list.task_incomplete}
+                  </div>
                 </div>
                 <div
                   className="col-sm-1 d-flex justify-content-center"
@@ -155,6 +171,7 @@ const mapStatetoProps = state => {
   return {
     listArr: state.ListReducer.lists,
     newList: state.ListReducer.list,
+    count: state.ListReducer.incompleteCount,
     currentListId: state.ListReducer.currentListId,
     bgColor: state.ListReducer.bgColor,
     error: state.error
@@ -164,6 +181,7 @@ const mapStatetoProps = state => {
 const mapDispatchprops = dispatch => {
   return {
     onFetchData: () => dispatch(fetchData()),
+    // onFetchIncompleteTaskCount: id => dispatch(fetchIncompleteTaskCount(id)),
     onFetchTasks: id => dispatch(fetchTasks(id)),
     onAddList: listTitle => dispatch(addList(listTitle)),
     onDeleteList: id => dispatch(deleteList(id)),

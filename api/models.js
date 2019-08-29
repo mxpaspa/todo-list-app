@@ -32,10 +32,28 @@ const listSchema = mongoose.Schema({
     status: { type: String, default: 'pending' },
     completed_at: { type: Date, required: false }
   },
-  incomplete_count: { tasks: { type: Number }, subTasks: { type: Number } },
+  // incomplete_count: { tasks: { type: Number }, subTasks: { type: Number } },
+  task_incomplete: { type: Number },
+  task_complete: { type: Number },
   tasks: [taskSchema],
   previousState: String
 });
+
+// listSchema.post('init', (doc, next) => {
+//   doc.task_incomplete = doc.tasks.length;
+//   // doc.incomplete_count.subTasks = doc.tasks.forEach(task => {
+//   //   task.subTasks.length
+//   // });
+//   doc.save();
+//   // next();
+// });
+
+// listSchema.post('save', (doc, next) => {
+//   // doc.incomplete_count.tasks = doc.tasks.length;
+//   // doc.save();
+//   console.log(doc);
+//   next();
+// });
 
 listSchema.methods.toJSON = function() {
   var obj = this.toObject();

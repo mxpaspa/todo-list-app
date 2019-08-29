@@ -45,15 +45,15 @@ export const deleteTask = (taskID, listID) => {
   };
 };
 
-export const toggleTask = (taskId, listID) => {
+export const toggleTask = (taskID, listID) => {
+  console.log(`toggle task action ${taskID} || ${listID}`);
   return dispatch => {
     axios
-      .put(`http://${config.apiUrl}/tasks/${taskId}/toggle_completion`, {
+      .put(`http://${config.apiUrl}/tasks/${taskID}/toggle_completion`, {
         listID: listID
       })
       .then(res => {
-        console.log(listID);
-        console.log(res.data);
+        console.log(`toggle task action ${JSON.stringify(res.data.completed)}`);
         dispatch({ type: 'ToggleTask', data: res.data });
       })
       .catch(res => {

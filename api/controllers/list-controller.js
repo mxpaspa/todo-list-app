@@ -58,16 +58,14 @@ module.exports = {
           list.title = restoredState.title;
           list.completed = restoredState.completed;
           list.tasks = restoredState.tasks;
-          list.incomplete_count = restoredState.incomplete_count;
-
-          // list = restoredState;
+          // list.incomplete_count = restoredState.incomplete_count;
         } else if (list.completed.status == 'pending') {
           list.previousState = '';
           const previousState = JSON.stringify(list);
           list.previousState = previousState;
           list.completed = { status: 'completed', completed_at: new Date() };
-          list.incomplete_count.tasks = 0;
-          list.incomplete_count.subTasks = 0;
+          // list.incomplete_count.tasks = 0;
+          // list.incomplete_count.subTasks = 0;
 
           list.tasks.forEach(task => {
             if (task.completed.status == 'pending') {
@@ -109,7 +107,6 @@ module.exports = {
       .catch(err => res.status(204).send(err));
   },
 
-  //TODO: is there a mongoose query that will detel
   deleteList: function(req, res) {
     let id = req.params.id;
     List.findByIdAndRemove(id, function(err, list) {

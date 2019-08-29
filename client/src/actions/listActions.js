@@ -15,15 +15,15 @@ export const fetchData = () => {
   };
 };
 
-export const fetchCompletedTaskCount = listID => {
+export const fetchIncompletedTaskCount = id => {
   return dispatch => {
     axios
-      .get(`http://${config.apiUrl}/lists/${listID}`)
+      .get(`http://${config.apiUrl}/lists/${id}`)
       .then(res => {
-        console.log(`fetch completed tasks area ${res.data.incomplete_count.tasks}`);
+        console.log(`fetch incomplete tasks action ${res.data.task_incomplete}`);
         dispatch({
           type: 'FetchIncompleteCount',
-          incompleteCount: res.data.incomplete_count.tasks
+          data: res.data
         });
       })
       .catch(res => {
@@ -31,6 +31,24 @@ export const fetchCompletedTaskCount = listID => {
       });
   };
 };
+
+// export const fetchIncompleteTaskCount = listID => {
+//   console.log('incomplete tasks');
+//   return dispatch => {
+//     axios
+//       .get(`http://${config.apiUrl}/incompleteTaskCount/?listID=${listID}`)
+//       .then(res => {
+//         console.log(`fetch incomplete task count ${res.data}`);
+//         dispatch({
+//           type: 'FetchIncompleteCount',
+//           incompleteCount: res.data.incomplete_count.tasks
+//         });
+//       })
+//       .catch(res => {
+//         return Promise.reject(res);
+//       });
+//   };
+// };
 
 export const toggleList = id => {
   return dispatch => {

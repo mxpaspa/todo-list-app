@@ -10,7 +10,7 @@ import {
   showCompletedTasksArea
 } from '../actions/taskActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
-import { fetchCompletedTaskCount } from '../actions/listActions';
+import { fetchIncompletedTaskCount } from '../actions/listActions';
 
 class TaskTable extends Component {
   state = {};
@@ -18,6 +18,9 @@ class TaskTable extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.onAddTodo(this.props.currentListId, this.state.taskTitle);
+    setTimeout(() => {
+      this.props.onFetchIncompletedTaskCount(this.props.currentListId);
+    }, 500);
     e.target.reset();
   };
 
@@ -45,7 +48,7 @@ class TaskTable extends Component {
                 id="list_nav_submit"
                 className="btn btn-primary btn-lg"
                 onClick={() => {
-                  this.props.onFetchCompletedTaskCount(this.props.currentListId);
+                  // this.props.onFetchIncompletedTaskCount(this.props.currentListId);
                 }}
               >
                 Submit
@@ -81,7 +84,9 @@ class TaskTable extends Component {
                       onClick={() => {
                         this.props.onSetCurrentTaskId(todo._id);
                         this.props.onToggleTask(todo._id, this.props.currentListId);
-                        this.props.onFetchCompletedTaskCount(this.props.currentListId);
+                        setTimeout(() => {
+                          this.props.onFetchIncompletedTaskCount(this.props.currentListId);
+                        }, 500);
                       }}
                     />
                   </div>
@@ -116,6 +121,9 @@ class TaskTable extends Component {
                       style={{ backgroundColor: 'transparent' }}
                       onClick={() => {
                         this.props.onDeleteTask(todo._id, this.props.currentListId);
+                        setTimeout(() => {
+                          this.props.onFetchIncompletedTaskCount(this.props.currentListId);
+                        }, 500);
                       }}
                     >
                       <i className="fa fa-minus-circle" aria-hidden="true" />
@@ -145,7 +153,7 @@ class TaskTable extends Component {
               }
             }}
           >
-            Completed <span className="badge badge-light">{this.props.completedTaskCount}</span>
+            Completed <span className="badge badge-light" />
           </button>
         </div>
         {this.props.showCompletedTasksArea === 'true' && <CompletedArea />}
@@ -162,8 +170,8 @@ const mapStatetoProps = state => {
     currentListId: state.ListReducer.currentListId,
     currentTaskId: state.ListReducer.currentTaskId,
     showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel,
-    showCompletedTasksArea: state.ListReducer.showCompletedTasksArea,
-    completedTaskCount: state.ListReducer.incompleteCount
+    showCompletedTasksArea: state.ListReducer.showCompletedTasksArea
+    // completedTaskCount: state.ListReducer.incompleteCount
   };
 };
 
@@ -177,7 +185,7 @@ const mapDispatchprops = dispatch => {
     onShowEditTaskModal: (id, show) => dispatch(showEditTaskModal(id, show)),
     onShowCompletedTasksArea: show => dispatch(showCompletedTasksArea(show)),
     onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID)),
-    onFetchCompletedTaskCount: listID => dispatch(fetchCompletedTaskCount(listID))
+    onFetchIncompletedTaskCount: listID => dispatch(fetchIncompletedTaskCount(listID))
   };
 };
 

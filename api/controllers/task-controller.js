@@ -37,15 +37,28 @@ module.exports = {
       if (err) {
         throw err;
       }
+      //TODO:
+      // doc.task_incomplete = doc.tasks.length;
+      let incompleteTasks = doc.tasks.filter(task => task.completed.status == 'pending');
+      // console.log(incompleteTasks.length);
+      doc.task_incomplete = incompleteTasks.length;
+      doc.save();
+
       res.send(doc.tasks[doc.tasks.length - 1]);
     });
   },
 
   getTasks: function(req, res) {
     listID = req.query.listID;
-    // taskID = req.query.listID;
     List.findById(listID)
       .then(list => res.send(list.tasks))
+      .catch(err => res.status(422).send(err + 'Unable to retrieve tasks'));
+  },
+
+  getIncompleteTaskCount: function(req, res) {
+    listID = req.query.listID;
+    List.findById(listID)
+      .then(list => res.send(String(list.tasks.length)))
       .catch(err => res.status(422).send(err + 'Unable to retrieve tasks'));
   },
 
@@ -68,8 +81,13 @@ module.exports = {
     List.findById(listID)
       .then(list => {
         list.tasks.id(taskID).remove();
+        // console.log(list.tasks.length);
+        // .then(list => (list.task_incomplete = list.tasks.length));
+        list.task_incomplete = list.tasks.length;
+        console.log(list.task_incomplete);
         return list.save();
       })
+
       .then(doc => res.send(doc))
       .catch(err => res.status(422).send(err));
   },
@@ -95,10 +113,9 @@ module.exports = {
   toggleTask: function(req, res) {
     let listID = req.body.listID;
     let taskID = req.params.id;
-
     //TODO: reading back the entire list here, not sure if that's desireable
-    //TODO: the instance method is not working as desired-the response still sends back previousState
-    //TODO: there is no error being thrown here, when the wrong task id is being passed into the url
+    //TODO: the instance method is not working as desired - the response still sends back previousState
+    //TODO: there is no error being thrown here when the wrong task id is being passed into the url
     List.findById(listID)
       .then(list => {
         let task = list.tasks.id(taskID);
@@ -107,12 +124,15 @@ module.exports = {
           const restoredTaskState = JSON.parse(task.previousTaskState);
           const restoredListState = JSON.parse(list.previousState);
 
+          list.task_incomplete = restoredListState.task_incomplete;
           task.title = restoredTaskState.title;
           task.completed = restoredTaskState.completed;
+
           task.subTasks = restoredTaskState.subTasks;
-          list.incomplete_count.tasks = restoredListState.incomplete_count.tasks;
-          list.incomplete_count.subTasks = restoredListState.incomplete_count.subTasks;
-          // list.incomplete_count.tasks = list.previousState.incomplete_count
+          // list.task_incomplete = restoredListState.task_incomplete;
+          // list.incomplete_count.subTasks = restoredListState.incomplete_count.subTasks;
+
+          // If the task is pending, then change to completed
         } else if (task.completed.status == 'pending') {
           task.previousState = '';
           const previousTaskState = JSON.stringify(task);
@@ -120,18 +140,18 @@ module.exports = {
 
           list.previousState = previousListState;
           task.previousTaskState = previousTaskState;
-
           task.completed = { status: 'completed', completed_at: new Date() };
-          list.incomplete_count.tasks -= 1;
-
           task.subTasks.forEach(subTask => {
             if (subTask.completed.status == 'pending') {
-              list.incomplete_count.subTasks -= 1;
               subTask.completed = { status: 'completed', completed_at: new Date() };
             }
           });
-        }
 
+          //TODO: funcitonalize this
+          let incompleteTasks = list.tasks.filter(task => task.completed.status == 'pending');
+          console.log(incompleteTasks.length);
+          list.task_incomplete = incompleteTasks.length;
+        }
         return list.save();
       })
       .then(list => {

@@ -6,8 +6,8 @@ const intialState = {
   currentTaskId: '',
   showEditListModal: 'false',
   showEditTaskModal: 'false',
-  showCompletedTasksArea: null,
-  incompleteCount: 0
+  showCompletedTasksArea: null
+  // incompleteCount: ''
 };
 
 const ListReducer = (state = intialState, action) => {
@@ -15,8 +15,16 @@ const ListReducer = (state = intialState, action) => {
     case 'FetchData':
       return { ...state, lists: action.data };
     case 'FetchIncompleteCount':
-      console.log(`fetch incomplete count reducer ${action.incompleteCount}`);
-      return { ...state, incompleteCount: action.incompleteCount };
+      console.log(`fetch incomplete count reducer ${action.data.task_incomplete}`);
+      // return { ...state, incompleteCount: action.incompleteCount };
+      return {
+        ...state,
+        lists: state.lists.map(list =>
+          list._id === action.data._id
+            ? { ...list, task_incomplete: action.data.task_incomplete }
+            : list
+        )
+      };
     case 'ToggleList':
       let test = action.data.tasks.map(task => task.subTasks);
       var flattened = [].concat.apply([], test);

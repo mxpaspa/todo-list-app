@@ -34,7 +34,7 @@ module.exports = {
       .then(list => {
         let task = list.tasks.id(taskID);
         task.subTasks.push(newSubTask);
-        list.incomplete_count.subTasks += 1;
+        // list.incomplete_count.subTasks += 1;
         list
           .save()
           .then(doc => {
@@ -88,10 +88,10 @@ module.exports = {
         let subTask = list.tasks.id(taskID).subTasks.id(subtaskID);
         if (subTask.completed.status == 'pending') {
           subTask.completed = { status: 'completed', completed_at: new Date() };
-          list.incomplete_count.subTasks -= 1;
+          // list.incomplete_count.subTasks -= 1;
         } else {
           subTask.completed = { status: 'pending' };
-          list.incomplete_count.subTasks += 1;
+          // list.incomplete_count.subTasks += 1;
         }
 
         list.save().then(doc => res.send(doc.tasks.id(taskID).subTasks.id(subtaskID)));

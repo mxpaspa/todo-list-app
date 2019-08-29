@@ -9,7 +9,7 @@ import {
   showEditTaskModal
 } from '../actions/taskActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
-import { fetchCompletedTaskCount } from '../actions/listActions';
+import { fetchIncompletedTaskCount } from '../actions/listActions';
 
 class TaskTable extends Component {
   state = {};
@@ -54,7 +54,9 @@ class TaskTable extends Component {
                     onClick={() => {
                       this.props.onSetCurrentTaskId(todo._id);
                       this.props.onToggleTask(todo._id, this.props.currentListId);
-                      this.props.onFetchCompletedTaskCount(this.props.currentListId);
+                      setTimeout(() => {
+                        this.props.onFetchIncompletedTaskCount(this.props.currentListId);
+                      }, 500);
                     }}
                   />
                 </div>
@@ -110,8 +112,8 @@ const mapStatetoProps = state => {
     data: state.data,
     currentListId: state.ListReducer.currentListId,
     currentTaskId: state.ListReducer.currentTaskId,
-    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel,
-    completedTaskCount: state.ListReducer.incompleteCount
+    showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel
+    // completedTaskCount: state.ListReducer.incompleteCount
   };
 };
 
@@ -124,7 +126,7 @@ const mapDispatchprops = dispatch => {
     onShowSubTaskPanel: () => dispatch(showSubTaskPanel()),
     onShowEditTaskModal: (id, show) => dispatch(showEditTaskModal(id, show)),
     onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID)),
-    onFetchCompletedTaskCount: listID => dispatch(fetchCompletedTaskCount(listID))
+    onFetchIncompletedTaskCount: listID => dispatch(fetchIncompletedTaskCount(listID))
   };
 };
 
