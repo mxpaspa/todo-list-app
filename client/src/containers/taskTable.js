@@ -10,7 +10,7 @@ import {
   showCompletedTasksArea
 } from '../actions/taskActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
-import { fetchIncompletedTaskCount } from '../actions/listActions';
+import { fetchIncompletedTaskCount, fetchCompletedTaskCount } from '../actions/listActions';
 
 class TaskTable extends Component {
   state = {};
@@ -86,7 +86,10 @@ class TaskTable extends Component {
                         this.props.onToggleTask(todo._id, this.props.currentListId);
                         setTimeout(() => {
                           this.props.onFetchIncompletedTaskCount(this.props.currentListId);
-                        }, 500);
+                        }, 250);
+                        setTimeout(() => {
+                          this.props.onFetchCompletedTaskCount(this.props.currentListId);
+                        }, 250);
                       }}
                     />
                   </div>
@@ -153,7 +156,7 @@ class TaskTable extends Component {
               }
             }}
           >
-            Completed <span className="badge badge-light" />
+            Completed {this.props.completedTaskCount} <span className="badge badge-light" />
           </button>
         </div>
         {this.props.showCompletedTasksArea === 'true' && <CompletedArea />}
@@ -170,8 +173,8 @@ const mapStatetoProps = state => {
     currentListId: state.ListReducer.currentListId,
     currentTaskId: state.ListReducer.currentTaskId,
     showSubTaskPanel: state.SubTaskReducer.showSubTaskPanel,
-    showCompletedTasksArea: state.ListReducer.showCompletedTasksArea
-    // completedTaskCount: state.ListReducer.incompleteCount
+    showCompletedTasksArea: state.ListReducer.showCompletedTasksArea,
+    completedTaskCount: state.ListReducer.completedTaskCount
   };
 };
 
@@ -185,7 +188,8 @@ const mapDispatchprops = dispatch => {
     onShowEditTaskModal: (id, show) => dispatch(showEditTaskModal(id, show)),
     onShowCompletedTasksArea: show => dispatch(showCompletedTasksArea(show)),
     onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID)),
-    onFetchIncompletedTaskCount: listID => dispatch(fetchIncompletedTaskCount(listID))
+    onFetchIncompletedTaskCount: listID => dispatch(fetchIncompletedTaskCount(listID)),
+    onFetchCompletedTaskCount: listID => dispatch(fetchCompletedTaskCount(listID))
   };
 };
 

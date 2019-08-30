@@ -9,6 +9,8 @@ router.get('/tasks/:id', tasksController.getTaskById);
 
 router.get('/incompleteTaskCount', tasksController.getIncompleteTaskCount);
 
+router.get('/completedTaskCount', tasksController.getCompletedTaskCount);
+
 router.get('/tasks', tasksController.getTasks);
 
 router.put('/tasks/:id/toggle_completion', tasksController.toggleTask);

@@ -9,7 +9,7 @@ import {
   showEditTaskModal
 } from '../actions/taskActions';
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
-import { fetchIncompletedTaskCount } from '../actions/listActions';
+import { fetchIncompletedTaskCount, fetchCompletedTaskCount } from '../actions/listActions';
 
 class TaskTable extends Component {
   state = {};
@@ -56,7 +56,10 @@ class TaskTable extends Component {
                       this.props.onToggleTask(todo._id, this.props.currentListId);
                       setTimeout(() => {
                         this.props.onFetchIncompletedTaskCount(this.props.currentListId);
-                      }, 500);
+                      }, 250);
+                      setTimeout(() => {
+                        this.props.onFetchCompletedTaskCount(this.props.currentListId);
+                      }, 250);
                     }}
                   />
                 </div>
@@ -126,7 +129,8 @@ const mapDispatchprops = dispatch => {
     onShowSubTaskPanel: () => dispatch(showSubTaskPanel()),
     onShowEditTaskModal: (id, show) => dispatch(showEditTaskModal(id, show)),
     onFetchSubTasks: (listID, taskID) => dispatch(fetchSubTasks(listID, taskID)),
-    onFetchIncompletedTaskCount: listID => dispatch(fetchIncompletedTaskCount(listID))
+    onFetchIncompletedTaskCount: listID => dispatch(fetchIncompletedTaskCount(listID)),
+    onFetchCompletedTaskCount: listID => dispatch(fetchCompletedTaskCount(listID))
   };
 };
 

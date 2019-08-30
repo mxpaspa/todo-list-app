@@ -34,7 +34,7 @@ const listSchema = mongoose.Schema({
   },
   // incomplete_count: { tasks: { type: Number }, subTasks: { type: Number } },
   task_incomplete: { type: Number },
-  task_complete: { type: Number },
+  task_complete: { type: Number, default: 0 },
   tasks: [taskSchema],
   previousState: String
 });

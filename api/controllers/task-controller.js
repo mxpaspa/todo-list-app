@@ -62,6 +62,16 @@ module.exports = {
       .catch(err => res.status(422).send(err + 'Unable to retrieve tasks'));
   },
 
+  getCompletedTaskCount: function(req, res) {
+    listID = req.query.listID;
+    List.findById(listID)
+      .then(list => {
+        let completedTasks = list.task_completed;
+        res.send(String(completedTasks.length));
+      })
+      .catch(err => res.status(422).send(err + 'Unable to retrieve tasks'));
+  },
+
   getTaskById: function(req, res) {
     let taskID = req.params.id;
     let listID = req.query.listID;
@@ -81,8 +91,6 @@ module.exports = {
     List.findById(listID)
       .then(list => {
         list.tasks.id(taskID).remove();
-        // console.log(list.tasks.length);
-        // .then(list => (list.task_incomplete = list.tasks.length));
         list.task_incomplete = list.tasks.length;
         console.log(list.task_incomplete);
         return list.save();
@@ -125,12 +133,11 @@ module.exports = {
           const restoredListState = JSON.parse(list.previousState);
 
           list.task_incomplete = restoredListState.task_incomplete;
+          list.task_complete = restoredListState.task_complete;
+          console.log(list.task_complete);
           task.title = restoredTaskState.title;
           task.completed = restoredTaskState.completed;
-
           task.subTasks = restoredTaskState.subTasks;
-          // list.task_incomplete = restoredListState.task_incomplete;
-          // list.incomplete_count.subTasks = restoredListState.incomplete_count.subTasks;
 
           // If the task is pending, then change to completed
         } else if (task.completed.status == 'pending') {
@@ -149,8 +156,11 @@ module.exports = {
 
           //TODO: funcitonalize this
           let incompleteTasks = list.tasks.filter(task => task.completed.status == 'pending');
-          console.log(incompleteTasks.length);
+          let completedTasks = list.tasks.filter(task => task.completed.status == 'completed');
+          // console.log(completedTasks.length);
           list.task_incomplete = incompleteTasks.length;
+          list.task_complete = completedTasks.length;
+          console.log(list.task_complete);
         }
         return list.save();
       })

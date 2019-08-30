@@ -20,7 +20,7 @@ export const fetchIncompletedTaskCount = id => {
     axios
       .get(`http://${config.apiUrl}/lists/${id}`)
       .then(res => {
-        console.log(`fetch incomplete tasks action ${res.data.task_incomplete}`);
+        // console.log(`fetch incomplete tasks action ${res.data.task_incomplete}`);
         dispatch({
           type: 'FetchIncompleteCount',
           data: res.data
@@ -32,23 +32,37 @@ export const fetchIncompletedTaskCount = id => {
   };
 };
 
-// export const fetchIncompleteTaskCount = listID => {
-//   console.log('incomplete tasks');
-//   return dispatch => {
-//     axios
-//       .get(`http://${config.apiUrl}/incompleteTaskCount/?listID=${listID}`)
-//       .then(res => {
-//         console.log(`fetch incomplete task count ${res.data}`);
-//         dispatch({
-//           type: 'FetchIncompleteCount',
-//           incompleteCount: res.data.incomplete_count.tasks
-//         });
-//       })
-//       .catch(res => {
-//         return Promise.reject(res);
-//       });
-//   };
-// };
+export const fetchCompletedTaskCount = id => {
+  console.log('completed tasks');
+  // return dispatch => {
+  //   axios
+  //     .get(`http://${config.apiUrl}/completedTaskCount/${id}`)
+  //     .then(res => {
+  //       console.log(`fetch completed task count ${res.data}`);
+  //       dispatch({
+  //         type: 'FetchIncompleteCount',
+  //         completeCount: res.data.task_complete
+  //       });
+  //     })
+  //     .catch(res => {
+  //       return Promise.reject(res);
+  //     });
+  // };
+  return dispatch => {
+    axios
+      .get(`http://${config.apiUrl}/lists/${id}`)
+      .then(res => {
+        // console.log(`fetch incomplete tasks action ${res.data.task_incomplete}`);
+        dispatch({
+          type: 'FetchCompletedCount',
+          data: res.data
+        });
+      })
+      .catch(res => {
+        return Promise.reject(res);
+      });
+  };
+};
 
 export const toggleList = id => {
   return dispatch => {
