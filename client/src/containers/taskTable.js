@@ -43,14 +43,7 @@ class TaskTable extends Component {
               id="addTask"
             />
             <span className="input-group-btn">
-              <button
-                type="submit"
-                id="list_nav_submit"
-                className="btn btn-primary btn-lg"
-                onClick={() => {
-                  // this.props.onFetchIncompletedTaskCount(this.props.currentListId);
-                }}
-              >
+              <button type="submit" id="list_nav_submit" className="btn btn-primary btn-lg">
                 Submit
               </button>
             </span>

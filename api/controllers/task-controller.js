@@ -134,7 +134,6 @@ module.exports = {
 
           list.task_incomplete = restoredListState.task_incomplete;
           list.task_complete = restoredListState.task_complete;
-          console.log(list.task_complete);
           task.title = restoredTaskState.title;
           task.completed = restoredTaskState.completed;
           task.subTasks = restoredTaskState.subTasks;
@@ -160,7 +159,6 @@ module.exports = {
           // console.log(completedTasks.length);
           list.task_incomplete = incompleteTasks.length;
           list.task_complete = completedTasks.length;
-          console.log(list.task_complete);
         }
         return list.save();
       })

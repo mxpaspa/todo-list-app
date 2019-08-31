@@ -113,23 +113,33 @@ class ListNav extends Component {
                   />
                   {list.title}
                   <div
-                    style={{
-                      marginLeft: '180px',
-                      // width: '15px',
-                      fontSize: '10px',
-                      backgroundColor: 'rgba(159, 90, 253, 1)',
-                      borderRadius: '2px',
-                      height: '15px'
-                    }}
-                    className="col-sm-1 d-flex justify-content-center"
+                    style={
+                      {
+                        // marginLeft: '180px',
+                        // width: '15px',
+                        // marginRight: '3px'
+                      }
+                    }
+                    // className="col-sm-1 d-flex justify-content-center"
+                    className="col text-right"
                   >
-                    {list.task_incomplete}
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        backgroundColor: 'rgba(159, 90, 253, 1)',
+                        borderRadius: '2px',
+                        height: '15px',
+                        // width: '15px',
+                        float: 'right'
+                      }}
+                      className="col-sm-1 d-flex justify-content-center"
+                      // className="col-sm-1"
+                    >
+                      {list.task_incomplete}
+                    </div>
                   </div>
                 </div>
-                <div
-                  className="col-sm-1 d-flex justify-content-center"
-                  style={{ paddingLeft: '0px', paddingRight: '0px' }}
-                >
+                <div style={{ paddingLeft: '0px', paddingRight: '0px' }}>
                   <button
                     key={list._id}
                     className="btn btn-sm"

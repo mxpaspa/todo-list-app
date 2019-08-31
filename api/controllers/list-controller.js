@@ -18,7 +18,7 @@ module.exports = {
     const newList = new List({
       title: listTitle,
       completed: { status: 'pending' },
-      // incomplete_count: { tasks: 0, subTasks: 0 },
+
       previousState: ''
     });
     newList
