@@ -34,7 +34,7 @@ class TaskModal extends Component {
           bottom: '0',
           left: '0',
           right: '0',
-
+          zIndex: '2',
           backgroundColor: 'rgba(0,0,0,0.3)'
         }}
       >

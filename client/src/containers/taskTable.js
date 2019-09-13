@@ -12,6 +12,13 @@ import {
 import { showSubTaskPanel, fetchSubTasks } from '../actions/subTaskActions';
 import { fetchIncompletedTaskCount, fetchCompletedTaskCount } from '../actions/listActions';
 
+const styles = {
+  someElement: {
+    paddingLeft: '0px',
+    paddingRight: '0px'
+  }
+};
+
 class TaskTable extends Component {
   state = {};
 
@@ -28,6 +35,16 @@ class TaskTable extends Component {
     this.setState({
       taskTitle: e.target.value
     });
+  }
+
+  handleCheckbox(todo) {
+    this.props.onSetCurrentTaskId(todo._id);
+    this.props.onToggleTask(todo._id, this.props.currentListId);
+
+    setTimeout(() => {
+      this.props.onFetchIncompletedTaskCount(this.props.currentListId);
+      this.props.onFetchCompletedTaskCount(this.props.currentListId);
+    }, 250);
   }
 
   render() {
@@ -74,16 +91,7 @@ class TaskTable extends Component {
                       type="checkbox"
                       aria-label="Checkbox for following text input"
                       key={todo._id}
-                      onClick={() => {
-                        this.props.onSetCurrentTaskId(todo._id);
-                        this.props.onToggleTask(todo._id, this.props.currentListId);
-                        setTimeout(() => {
-                          this.props.onFetchIncompletedTaskCount(this.props.currentListId);
-                        }, 250);
-                        setTimeout(() => {
-                          this.props.onFetchCompletedTaskCount(this.props.currentListId);
-                        }, 250);
-                      }}
+                      onClick={() => this.handleCheckbox(todo)}
                     />
                   </div>
                   <div
@@ -96,7 +104,7 @@ class TaskTable extends Component {
                   </div>
                   <div
                     className="col-sm-1 d-flex justify-content-center"
-                    style={{ paddingLeft: '0px', paddingRight: '0px' }}
+                    style={styles.someElement}
                   >
                     <button
                       key={todo._id}

@@ -108,6 +108,9 @@ class ListNav extends Component {
                     type="checkbox"
                     onChange={() => {
                       this.props.onToggleList(list._id);
+                      setTimeout(() => {
+                        this.props.onFetchCompletedTaskCount(this.props.currentListId);
+                      }, 250);
                     }}
                     aria-label="Checkbox for toggling list completion"
                   />

@@ -63,6 +63,7 @@ export const toggleTask = (taskID, listID) => {
 };
 
 export const setCurrentTaskId = id => {
+  console.log('setting task ID');
   return dispatch => {
     dispatch({ type: 'SetCurrentTaskID', currentTaskId: id });
   };
