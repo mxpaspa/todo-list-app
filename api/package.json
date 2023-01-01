@@ -13,7 +13,7 @@
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
-    "config": "^3.0.1",
+    "config": "^3.3.8",
     "express": "^4.16.4",
     "express-validation": "^1.0.2",
     "express-validator": "^5.3.1",
